@@ -11,17 +11,20 @@ pub fn get_or_create_master_key() -> Result<[u8; 32], String> {
 
     match entry.get_password() {
         Ok(key_base64) => {
-            let decoded = BASE64.decode(key_base64.as_bytes())
+            let decoded = BASE64
+                .decode(key_base64.as_bytes())
                 .map_err(|e| format!("Ошибка декодирования ключа: {}", e))?;
-            
-            decoded.try_into()
+
+            decoded
+                .try_into()
                 .map_err(|_| "Ключ в хранилище имеет неверную длину (не 32 байта)".to_string())
-        },
+        }
         Err(_) => {
             let raw_key = generate_random_key();
             let encoded_key = BASE64.encode(&raw_key);
 
-            entry.set_password(&encoded_key)
+            entry
+                .set_password(&encoded_key)
                 .map_err(|e| format!("Не удалось сохранить мастер-ключ: {}", e))?;
 
             Ok(raw_key)

@@ -1,16 +1,11 @@
 [package]
 name = "zeleyy-authenticator"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+version = "0.0.1"
+description = "TOTP authenticator app for managing 2FA codes"
+authors = ["Zeleyy"]
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [lib]
-# The `_lib` suffix may seem redundant but it is necessary
-# to make the lib name unique and wouldn't conflict with the bin name.
-# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
 name = "zeleyy_authenticator_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
@@ -32,3 +27,6 @@ openssl = { version = "0.10.76", features = ["vendored"] }
 totp-lite = "2.0.1"
 base32 = "0.5.1"
 data-encoding = "2.10.0"
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"

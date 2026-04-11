@@ -1,0 +1,89 @@
+.mainHeader {
+    position: sticky;
+    padding: var(--spacing-sm);
+    background-color: var(--bg-primary);
+    border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+    top: 0;
+    flex-shrink: 0;
+    z-index: 10;
+
+    &__content {
+        position: relative;
+    }
+
+    &__menuBtn {
+        position: absolute;
+        left: 0;
+        z-index: 11;
+    }
+
+    &__search {
+        padding-left: 50px;
+    }
+}
+
+.fab {
+    position: fixed;
+    right: var(--spacing-sm);
+    bottom: var(--spacing-sm);
+    z-index: 1000;
+}
+
+.sideDrawer {
+    &__overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        background-color: rgba(0, 0, 0, 0);
+        backdrop-filter: blur(0px);
+        transition: 
+            background-color 0.3s ease-in-out, 
+            backdrop-filter 0.3s ease-in-out,
+            visibility 0.3s; 
+        visibility: hidden;
+        pointer-events: none;
+
+        &--open {
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            visibility: visible;
+            pointer-events: auto;
+
+            .sideDrawer__container {
+                transform: translateX(0);
+            }
+        }
+    }
+
+    &__container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 10001;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+        pointer-events: auto; 
+    }
+
+    &__content {
+        background-color: var(--bg-secondary);
+        height: 100%;
+        max-width: 90vw;
+        border-radius: 0 var(--border-radius-xl) var(--border-radius-xl) 0;
+        overflow-y: auto;
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+        padding: var(--spacing-md);
+    }
+
+    &__title {
+        color: var(--primary);
+        font-size: 1.5rem;
+    }
+
+    &__navItem {
+        &:hover {
+            background-color: var(--bg-tertiary);
+        }
+    }
+}

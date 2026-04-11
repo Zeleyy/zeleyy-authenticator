@@ -1,0 +1,62 @@
+$xs: #{var(--spacing-xs)};
+$sm: #{var(--spacing-sm)};
+$md: #{var(--spacing-md)};
+$lg: #{var(--spacing-lg)};
+$xl: #{var(--spacing-xl)};
+
+.flex {
+    display: flex;
+
+    &--direction-row { flex-direction: row; }
+    &--direction-column { flex-direction: column; }
+
+    &--justify-start { justify-content: flex-start; }
+    &--justify-center { justify-content: center; }
+    &--justify-space-between { justify-content: space-between; }
+    &--justify-flex-end { justify-content: flex-end; }
+
+    &--align-stretch { align-items: stretch; }
+    &--align-center { align-items: center; }
+    &--align-flex-start { align-items: flex-start; }
+    &--align-baseline { align-items: baseline; }
+
+    &--wrap-nowrap { flex-wrap: nowrap; }
+    &--wrap-wrap { flex-wrap: wrap; }
+    &--wrap-reverse { flex-wrap: wrap-reverse; }
+
+    &--gap-xs { gap: $xs; }
+    &--gap-sm { gap: $sm; }
+    &--gap-md { gap: $md; }
+    &--gap-lg { gap: $lg; }
+    &--gap-xl { gap: $xl; }
+
+    &--card-sm { max-width: 200px; }
+    &--card-md { max-width: 300px; }
+    &--card-lg { max-width: 400px; }
+    &--form-sm { max-width: 600px; }
+    &--form-md { max-width: 700px; }
+    &--form-lg { max-width: 800px; }
+    &--page-sm { max-width: 1000px; }
+    &--page-md { max-width: 1200px; }
+    &--page-lg { max-width: 1600px; }
+    &--full { max-width: none; }
+
+    &--container {
+        margin: 0 auto;
+        padding: 0 $sm;
+    }
+
+    &--mt-xs { margin-top: $xs; }
+    &--mt-sm { margin-top: $sm; }
+    &--mt-md { margin-top: $md; }
+    &--mt-lg { margin-top: $lg; }
+    &--mt-xl { margin-top: $xl; }
+
+    &--mb-xs { margin-bottom: $xs; }
+    &--mb-sm { margin-bottom: $sm; }
+    &--mb-md { margin-bottom: $md; }
+    &--mb-lg { margin-bottom: $lg; }
+    &--mb-xl { margin-bottom: $xl; }
+
+    &--full-width { width: 100%; }
+}

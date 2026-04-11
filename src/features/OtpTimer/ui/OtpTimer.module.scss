@@ -1,0 +1,12 @@
+.otpTimer {
+    &__svg {
+        transform: rotate(-90deg) scaleY(-1);
+    }
+
+    &__progress {
+        fill: none;
+        stroke: var(--primary);
+        stroke-width: 12;
+        transition: stroke-dashoffset 0.3s linear;
+    }
+}

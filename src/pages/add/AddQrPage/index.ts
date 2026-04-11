@@ -1,0 +1,1 @@
+export { AddQrPage } from "./AddQrPage";

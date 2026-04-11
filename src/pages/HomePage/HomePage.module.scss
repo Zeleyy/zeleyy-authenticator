@@ -1,0 +1,12 @@
+.code__card {
+    padding-top: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-medium);
+    cursor: pointer;
+}
+
+.code {
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+}

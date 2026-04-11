@@ -1,0 +1,10 @@
+@use "colors.scss";
+@use "effects.scss";
+@use "spacing.scss";
+
+:root {
+    --wave-gradient: linear-gradient(90deg,
+        var(--color-loading-wave-low) 0%,
+        var(--color-loading-wave-high) 50%,
+        var(--color-loading-wave-low) 100%);
+}

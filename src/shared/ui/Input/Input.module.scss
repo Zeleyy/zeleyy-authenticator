@@ -1,0 +1,25 @@
+.input {
+    border: 1px solid var(--bg-tertiary);
+    border-radius: var(--border-radius-md);
+    background-color: var(--bg-tertiary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--text-primary);
+    font-size: 16px;
+    transition: all var(--transition-normal);
+    width: 100%;
+    
+    &:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    :disabled {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+    &--error {
+        border-color: var(--color-red);
+    }
+}

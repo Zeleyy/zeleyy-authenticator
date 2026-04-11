@@ -1,0 +1,9 @@
+.pageSection {
+    &__title {
+        padding-bottom: var(--spacing-xs);
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        border-bottom: 1px solid var(--border-light);
+    }
+}

@@ -1,0 +1,100 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-md);
+    border: 1px solid transparent;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    outline: none;
+
+    &:disabled {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+    &--primary {
+        background-color: var(--primary);
+        color: var(--text-inverted);
+
+        &:hover:not(:disabled) {
+            background-color: var(--primary-600);
+        }
+    }
+
+    &--secondary {
+        border: 1px solid var(--bg-tertiary);
+        background-color: var(--bg-tertiary);
+        color: var(--text-secondary);
+
+        &:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+    }
+
+    &--outline {
+        background-color: transparent;
+        border: 1px solid var(--btn-color, var(--primary));
+        color: var(--btn-color, var(--primary));
+
+        &:hover:not(:disabled) {
+            border-color: var(--btn-color, var(--primary));
+            background-color: var(--btn-color, var(--primary));
+            color: var(--white);
+        }
+    }
+
+    &--ghost {
+        background: none;
+        border: none;
+        outline: none;
+        min-width: auto;
+        color: var(--text-secondary);
+
+        &:hover:not(:disabled) {
+            color: var(--primary);
+        }
+    }
+
+    &--small {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 14px;
+
+        &.button--square {
+            padding: var(--spacing-sm);
+        }
+    }
+
+    &--medium {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 16px;
+
+        &.button--square {
+            padding: var(--spacing-md);
+        }
+    }
+
+    &--large {
+        padding: var(--spacing-smd) var(--spacing-lg);
+        font-size: 16px;
+
+        &.button--square {
+            padding: var(--spacing-lg);
+        }
+    }
+
+    &--square {
+        aspect-ratio: 1;
+    }
+
+    &--full-width {
+        width: 100%;
+    }
+
+    &--no-padding {
+        padding: 0;
+    }
+}

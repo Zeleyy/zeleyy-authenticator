@@ -1,5 +1,5 @@
 import styles from "./Switch.module.scss";
-import { InputHTMLAttributes, useId } from "react";
+import { type InputHTMLAttributes, useId } from "react";
 import clsx from "clsx";
 
 interface SwitchProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {

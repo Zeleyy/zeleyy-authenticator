@@ -1,5 +1,5 @@
 import styles from "./PageSection.module.scss";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Flex } from "@/shared/ui";
 
 interface PageSectionProps {

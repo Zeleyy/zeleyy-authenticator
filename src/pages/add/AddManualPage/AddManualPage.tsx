@@ -1,59 +1,63 @@
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
-import { Button, Flex, Input } from "@/shared/ui";
-import { invoke } from "@tauri-apps/api/core";
-import { queryClient } from "@/shared/api";
 import { useNavigate } from "react-router-dom";
+import { Button, Flex, Input } from "@/shared/ui";
+import { useAddManualAccount } from "@/entities/account/hooks";
 
 export const AddManualPage = () => {
+    const navigate = useNavigate();
+    const { mutate: addAccount, isPending } = useAddManualAccount();
+
     const [formData, setFormData] = useState({
         accountName: "",
         secret: "",
     });
-    const navigate = useNavigate();
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (e: SyntheticEvent) => {
+    const handleSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
-        try {
-            if (formData.secret.length < 16) {
-                throw new Error("Ключ слишком короткий");
-            }
 
-            if (formData.accountName.length === 0) {
-                throw new Error("Название слишком короткое");
-            }
+        if (formData.accountName.trim().length === 0) return alert("Введите название");
+        if (formData.secret.trim().length < 16) return alert("Ключ должен быть не менее 16 символов");
 
-            console.log(formData);
-            await invoke<number>("add_account", formData);
-
-            queryClient.invalidateQueries({ queryKey: ["accounts"] });
-            navigate("/");
-        } catch (error) {
-            console.error("ERROR: ", error);
-        }
+        addAccount(formData, {
+            onSuccess: () => navigate("/"),
+            onError: (error) => {
+                console.error("Add account error:", error);
+                alert("Не удалось добавить аккаунт");
+            },
+        });
     };
 
     return (
-        <>
-            <Flex as="form" direction="column" gap="md" onSubmit={handleSubmit}>
-                <Flex direction="column" gap="sm">
-                    <Input
-                        name="accountName"
-                        placeholder="Название"
-                        onChange={handleChange}
-                    />
-                    <Input
-                        name="secret"
-                        placeholder="Ключ"
-                        onChange={handleChange}
-                    />
-                </Flex>
-                
-                <Button type="submit" fullWidth>Добавить</Button>
+        <Flex as="form" direction="column" gap="md" onSubmit={handleSubmit}>
+            <Flex direction="column" gap="sm">
+                <Input
+                    name="accountName"
+                    placeholder="Название (например, GitHub)"
+                    value={formData.accountName}
+                    onChange={handleChange}
+                    disabled={isPending}
+                />
+                <Input
+                    name="secret"
+                    placeholder="Секретный ключ (Base32)"
+                    value={formData.secret}
+                    onChange={handleChange}
+                    disabled={isPending}
+                />
             </Flex>
-        </>
+            
+            <Button
+                type="submit"
+                fullWidth
+                disabled={isPending}
+            >
+                {isPending ? "Добавление..." : "Добавить аккаунт"}
+            </Button>
+        </Flex>
     );
 };

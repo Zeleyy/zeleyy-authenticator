@@ -1,9 +1,11 @@
-import { useContextMenu, useCopyOtp, useDeleteAccount, type Account } from "@/entities/account";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useContextMenu, useCopyOtp, type Account } from "@/entities/account";
 import { ROUTES } from "@/shared/config";
 import { StatusAlert } from "@/shared/ui";
 import { CodeCard } from "@/widgets/CodeCard";
 import { ContextMenu } from "@/widgets/ContextMenu";
-import { useNavigate } from "react-router-dom";
+import { DeleteAccountModal } from "@/features/DeleteAccountModal";
 
 interface AccountListProps {
     accounts: Account[];
@@ -11,23 +13,19 @@ interface AccountListProps {
 
 export const AccountList = ({ accounts }: AccountListProps) => {
     const navigate = useNavigate();
+    const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
     const { copied, copy } = useCopyOtp();
     const { menu, openMenu, closeMenu } = useContextMenu<Account>();
-    const { mutate: deleteAccount } = useDeleteAccount();
 
     const actions = {
         edit: (account: Account) => {
+            closeMenu();
             const path = ROUTES.EDIT_ACCOUNT.replace(':accountId', String(account.account_id));
             navigate(path, { state: { accountName: account.account_name } });
-            closeMenu();
         },
-        delete: (accountId: number) => {
-            if (!confirm("Удалить аккаунт?")) return;
-            
-            deleteAccount(accountId, {
-                onSuccess: () => closeMenu(),
-                onError: () => alert("Не удалось удалить аккаунт")
-            });
+        delete: (account: Account) => {
+            closeMenu();
+            setSelectedAccount(account);
         }
     };
 
@@ -39,6 +37,12 @@ export const AccountList = ({ accounts }: AccountListProps) => {
                 show={copied}
                 placement="bottom"
                 offsetY={100}
+            />
+
+            <DeleteAccountModal
+                open={!!selectedAccount}
+                account={selectedAccount}
+                onClose={() => setSelectedAccount(null)}
             />
 
             {accounts.map((account) => (
@@ -67,7 +71,7 @@ export const AccountList = ({ accounts }: AccountListProps) => {
                         },
                         { 
                             label: "Удалить", 
-                            onClick: () => actions.delete(menu.data.account_id), 
+                            onClick: () => actions.delete(menu.data), 
                             danger: true 
                         },
                     ]}

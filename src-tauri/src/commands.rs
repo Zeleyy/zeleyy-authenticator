@@ -1,10 +1,6 @@
 use base32::Alphabet;
-use sqlx::SqliteConnection;
-use std::{
-    sync::Arc,
-    time::{SystemTime, UNIX_EPOCH},
-};
-use tokio::sync::Mutex;
+use sqlx::{SqlitePool};
+use std::time::{SystemTime, UNIX_EPOCH};
 use totp_lite::{totp_custom, Sha1};
 
 #[derive(serde::Serialize, sqlx::FromRow)]
@@ -28,14 +24,12 @@ pub struct AccountWithCode {
 
 #[tauri::command]
 pub async fn get_accounts(
-    db_conn: tauri::State<'_, Arc<Mutex<SqliteConnection>>>,
+    pool: tauri::State<'_, SqlitePool>,
 ) -> Result<Vec<AccountWithCode>, String> {
-    let mut conn = db_conn.lock().await;
-
     let accounts = sqlx::query_as::<_, Account>(
         "SELECT account_id, issuer, account_name, secret, digits, interval FROM accounts",
     )
-    .fetch_all(&mut *conn)
+    .fetch_all(pool.inner())
     .await
     .map_err(|e| e.to_string())?;
 
@@ -76,14 +70,13 @@ pub async fn get_accounts(
 
 #[tauri::command]
 pub async fn add_account(
-    db_conn: tauri::State<'_, Arc<Mutex<SqliteConnection>>>,
+    pool: tauri::State<'_, SqlitePool>,
     account_name: String,
     secret: String,
     issuer: Option<String>,
     digits: Option<i32>,
     interval: Option<i32>,
 ) -> Result<(), String> {
-    let mut conn = db_conn.lock().await;
     sqlx::query(
         "INSERT INTO accounts (issuer, account_name, secret, digits, interval) 
          VALUES (?, ?, ?, ?, ?)",
@@ -93,7 +86,7 @@ pub async fn add_account(
     .bind(secret.to_uppercase())
     .bind(digits.unwrap_or(6))
     .bind(interval.unwrap_or(30))
-    .execute(&mut *conn)
+    .execute(pool.inner())
     .await
     .map_err(|e| e.to_string())?;
 
@@ -102,12 +95,10 @@ pub async fn add_account(
 
 #[tauri::command]
 pub async fn update_account(
-    db_conn: tauri::State<'_, Arc<Mutex<SqliteConnection>>>,
+    pool: tauri::State<'_, SqlitePool>,
     account_id: i32,
     new_name: String,
 ) -> Result<(), String> {
-    let mut conn = db_conn.lock().await;
-
     sqlx::query(
         "UPDATE accounts
         SET account_name = ?
@@ -115,7 +106,7 @@ pub async fn update_account(
     )
     .bind(new_name)
     .bind(account_id)
-    .execute(&mut *conn)
+    .execute(pool.inner())
     .await
     .map_err(|e| e.to_string())?;
 
@@ -124,14 +115,12 @@ pub async fn update_account(
 
 #[tauri::command]
 pub async fn delete_account(
-    db_conn: tauri::State<'_, Arc<Mutex<SqliteConnection>>>,
+    pool: tauri::State<'_, SqlitePool>,
     account_id: i64,
 ) -> Result<(), String> {
-    let mut conn = db_conn.lock().await;
-
     sqlx::query("DELETE FROM accounts WHERE account_id = ?")
         .bind(account_id)
-        .execute(&mut *conn)
+        .execute(pool.inner())
         .await
         .map_err(|e| e.to_string())?;
 

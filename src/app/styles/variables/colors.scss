@@ -66,9 +66,23 @@
     --border-light: var(--neutral-800);
     --border-medium: var(--neutral-700);
 
-    --color-loading-wave: var(--primary);
-    --color-loading-wave-low: color-mix(in oklch, var(--color-loading-wave), transparent 90%);
-    --color-loading-wave-high: color-mix(in oklch, var(--color-loading-wave), transparent 80%);
+    --info: var(--accent-200);
+    --bg-info: color-mix(in oklch, var(--info), transparent 90%);
+
+    --error: var(--error-400);
+    --bg-error: color-mix(in oklch, var(--error), transparent 90%);
+
+    --success: var(--primary-400);
+    --bg-success: color-mix(in oklch, var(--success), transparent 90%);
+
+    --loading-wave: var(--primary);
+    --loading-wave-low: color-mix(in oklch, var(--loading-wave), transparent 90%);
+    --loading-wave-high: color-mix(in oklch, var(--loading-wave), transparent 80%);
+
+    --wave-gradient: linear-gradient(90deg,
+        var(--loading-wave-low) 0%,
+        var(--loading-wave-high) 50%,
+        var(--loading-wave-low) 100%);
 }
 
 [data-theme="light"] {

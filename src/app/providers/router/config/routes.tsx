@@ -32,8 +32,16 @@ export const routes: RouteObject[] = [
                 children: [
                     { index: true, element: <Navigate to={ROUTES.ADD.MANUAL} replace /> },
                     
-                    { path: ROUTES.ADD.MANUAL, element: <AddManualPage/> },
-                    { path: ROUTES.ADD.QR, element: <AddQrPage/> },
+                    {
+                        path: ROUTES.ADD.MANUAL,
+                        element: <AddManualPage/>,
+                        loader: () => ({ title: 'Добавление', backTo: '/' }),
+                    },
+                    {
+                        path: ROUTES.ADD.QR,
+                        element: <AddQrPage/>,
+                        loader: () => ({ title: 'Добавление', backTo: '/' }),
+                    },
                 ],
             },
         ],

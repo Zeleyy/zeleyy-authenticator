@@ -4,7 +4,7 @@
 
 :root {
     --wave-gradient: linear-gradient(90deg,
-        var(--color-loading-wave-low) 0%,
-        var(--color-loading-wave-high) 50%,
-        var(--color-loading-wave-low) 100%);
+        var(--loading-wave-low) 0%,
+        var(--loading-wave-high) 50%,
+        var(--loading-wave-low) 100%);
 }

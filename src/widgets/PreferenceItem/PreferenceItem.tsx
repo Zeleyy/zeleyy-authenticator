@@ -4,7 +4,7 @@ import { Flex } from "@/shared/ui";
 
 interface PreferenceItemProps {
     label?: string;
-    description?: string;
+    description?: ReactNode;
     control?: ReactNode
 }
 

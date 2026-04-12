@@ -3,3 +3,4 @@ export { Flex } from "./layout";
 export { Input } from "./Input";
 export { Switch } from "./Switch";
 export { Icon } from "./Icon";
+export { Skeleton, SpinnerLoader } from "./feedback";

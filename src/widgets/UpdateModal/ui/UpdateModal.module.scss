@@ -1,0 +1,54 @@
+.modal {
+    &__overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        background-color: rgba(0, 0, 0, 0);
+        backdrop-filter: blur(0px);
+        transition: 
+            background-color 0.3s ease-in-out, 
+            backdrop-filter 0.3s ease-in-out,
+            visibility 0.3s; 
+        visibility: hidden;
+        pointer-events: none;
+
+        &--open {
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            visibility: visible;
+            pointer-events: auto;
+
+            .modal__container {
+                transform: translateY(0);
+            }
+        }
+    }
+
+    &__container {
+        z-index: 10001;
+        transform: translateY(-200%);
+        transition: transform 0.3s ease-in-out;
+        pointer-events: auto; 
+    }
+
+    &__content {
+        background-color: var(--bg-secondary);
+        border-radius: var(--border-radius-xl);
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+        padding: var(--spacing-md);
+        max-width: 400px;
+    }
+
+    &__title {
+        text-align: center;
+    }
+
+    &__version {
+        font-weight: 700;
+    }
+
+    &__message {
+        color: var(--primary);
+        text-align: center;
+    }
+}

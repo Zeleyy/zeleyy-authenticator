@@ -1,8 +1,19 @@
-import { Button } from "@/shared/ui";
+import { useState } from "react";
+import { Button, Skeleton } from "@/shared/ui";
 import { PageSection } from "@/widgets/PageSection";
 import { PreferenceItem } from "@/widgets/PreferenceItem";
+import { useCurrentVersion } from "@/features/update";
+import { UpdateModal } from "@/widgets/UpdateModal";
 
 export const AboutPage = () => {
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
+    const handleUpdateModalClose = () => {
+        setIsUpdateModalOpen(false);
+    }
+
+    const { data: currentVersion, isLoading: isLoadingCurrent } = useCurrentVersion();
+    
     return (
         <>
             <PageSection title="Детали">
@@ -21,23 +32,17 @@ export const AboutPage = () => {
 
             <PageSection title="Обновления">
                 <PreferenceItem
-                    label="Текущая версия"
-                    description="Установленная версия приложения"
-                    control={<span>1.0.0</span>}
-                />
-                
-                <PreferenceItem
-                    label="Доступная версия"
-                    description="Последняя версия на GitHub"
-                    control={<span>1.1.0</span>}
-                />
-                
-                <PreferenceItem
-                    label="Обновить"
-                    description="Загрузить последнюю версию"
+                    label="Версия приложения"
+                    description={isLoadingCurrent
+                        ? <Skeleton radius="sm" height={19} maxWidth={40}/>
+                        : currentVersion
+                    }
                     control={
-                        <Button size="small" disabled>
-                            Обновить
+                        <Button
+                            size="small"
+                            onClick={() => setIsUpdateModalOpen(true)}    
+                        >
+                            обновление
                         </Button>
                     }
                 />
@@ -48,11 +53,12 @@ export const AboutPage = () => {
                     label="GitHub"
                     description="Исходный код"
                     control={
-                        <a 
-                            href="#" 
-                            style={{ color: 'var(--primary)', textDecoration: 'none' }}
+                        <a
+                            href="https://github.com/zeleyy/zeleyy-authenticator"
+                            target="_blank"
+                            data-tauri-drag-window
                         >
-                            github.com/zeleyy/authenticator →
+                            zeleyy-authenticator
                         </a>
                     }
                 />
@@ -61,11 +67,12 @@ export const AboutPage = () => {
                     label="Сообщить о проблеме"
                     description="Bug report или предложение"
                     control={
-                        <a 
-                            href="#" 
-                            style={{ color: 'var(--primary)', textDecoration: 'none' }}
+                        <a
+                            href="https://github.com/zeleyy/zeleyy-authenticator/issues/new"
+                            target="_blank"
+                            data-tauri-drag-window
                         >
-                            Создать issue →
+                            Создать issue
                         </a>
                     }
                 />
@@ -78,6 +85,11 @@ export const AboutPage = () => {
                     control={<span>MIT License</span>}
                 />
             </PageSection>
+
+            <UpdateModal
+                open={isUpdateModalOpen}
+                onClose={handleUpdateModalClose}
+            />
         </>
     );
 };

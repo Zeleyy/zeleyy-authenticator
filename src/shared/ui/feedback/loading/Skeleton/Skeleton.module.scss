@@ -1,0 +1,16 @@
+.skeleton {
+    background: var(--wave-gradient);
+    background-size: 200% 100%;
+    animation: loading 1.5s linear infinite;
+    flex-shrink: 0;
+
+    &--radius-sm { border-radius: var(--border-radius-sm); }
+    &--radius-md { border-radius: var(--border-radius-md); }
+    &--radius-lg { border-radius: var(--border-radius-lg); }
+    &--radius-full { border-radius: var(--border-radius-full); }
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}

@@ -1,1 +1,1 @@
-export { PreferenceItem } from "./PreferenceItem";
+export { PreferenceItem } from "./ui";

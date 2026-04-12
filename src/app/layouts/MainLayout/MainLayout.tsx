@@ -19,7 +19,7 @@ export const MainLayout = () => {
             </header>
 
             <main>
-                <Flex direction="column" gap="md" size="form-lg" container>
+                <Flex direction="column" gap="xs" size="form-lg" container>
                     <Outlet/>
                 </Flex>
             </main>

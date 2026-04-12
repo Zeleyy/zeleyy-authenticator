@@ -22,14 +22,14 @@ export const SecondaryLayout = () => {
     return (
         <>
             <header className={styles.secondaryHeader}>
-                <Flex align="center">
+                <Flex align="center" gap="sm">
                     <Button
                         variant="ghost"
                         size="small"
                         square
                         onClick={handleBack}
                     >
-                        <Icon name="icon-arrow-left" size={24} />
+                        <Icon name="icon-arrow-left" size={30} />
                     </Button>
                     <h1 className={styles.secondaryHeader__title}>{title}</h1>
                 </Flex>

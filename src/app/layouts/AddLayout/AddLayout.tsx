@@ -12,6 +12,7 @@ export const AddLayout = () => {
                         variant="ghost"
                         className={styles.addHeader__tab}
                         activeClass={styles["addHeader__tab--active"]}
+                        fullWidth
                     >
                         Вручную
                     </Button>
@@ -20,6 +21,7 @@ export const AddLayout = () => {
                         variant="ghost"
                         className={styles.addHeader__tab}
                         activeClass={styles["addHeader__tab--active"]}
+                        fullWidth
                     >
                         По QR
                     </Button>

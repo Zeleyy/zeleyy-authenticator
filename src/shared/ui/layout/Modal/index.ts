@@ -1,2 +1,1 @@
-export { Flex } from "./Flex";
 export { Modal } from "./Modal";

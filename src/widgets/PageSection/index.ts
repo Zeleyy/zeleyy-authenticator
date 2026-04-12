@@ -1,1 +1,1 @@
-export { PageSection } from "./PageSection";
+export { PageSection } from "./ui";

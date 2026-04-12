@@ -25,17 +25,17 @@
     --neutral-900: oklch(0.14 0.00433 150.4);
     --neutral-950: oklch(0 0.0034 150.4);
 
-    --error-50:  oklch(0.96 0.01973 26.23);
-    --error-100: oklch(0.92 0.04085 26.23);
-    --error-200: oklch(0.8 0.11439 26.23);
-    --error-300: oklch(0.7 0.1785 26.23);
-    --error-400: oklch(0.6 0.18063 26.23);
-    --error-500: oklch(0.5 0.17876 26.23);
-    --error-600: oklch(0.4 0.16269 26.23);
-    --error-700: oklch(0.3 0.12203 26.23);
-    --error-800: oklch(0.22 0.08953 26.23);
-    --error-900: oklch(0.14 0.05711 26.23);
-    --error-950: oklch(0 0.0277 26.23);
+    --red-50:  oklch(0.96 0.01973 26.23);
+    --red-100: oklch(0.92 0.04085 26.23);
+    --red-200: oklch(0.8 0.11439 26.23);
+    --red-300: oklch(0.7 0.1785 26.23);
+    --red-400: oklch(0.6 0.18063 26.23);
+    --red-500: oklch(0.5 0.17876 26.23);
+    --red-600: oklch(0.4 0.16269 26.23);
+    --red-700: oklch(0.3 0.12203 26.23);
+    --red-800: oklch(0.22 0.08953 26.23);
+    --red-900: oklch(0.14 0.05711 26.23);
+    --red-950: oklch(0 0.0277 26.23);
     
     --accent-50:  oklch(0.96 0.05692 185.4);
     --accent-100: oklch(0.92 0.12134 185.4);
@@ -50,6 +50,7 @@
     --accent-950: oklch(0.10 0.03 185.4);
 
     --white: var(--neutral-50);
+    --red: var(--red-400);
 
     /* Тёмная тема (по умолчанию) */
     --primary: var(--primary-400);
@@ -69,7 +70,7 @@
     --info: var(--accent-200);
     --bg-info: color-mix(in oklch, var(--info), transparent 90%);
 
-    --error: var(--error-400);
+    --error: var(--red-400);
     --bg-error: color-mix(in oklch, var(--error), transparent 90%);
 
     --success: var(--primary-400);
@@ -86,6 +87,10 @@
 }
 
 [data-theme="light"] {
+    --red: var(--red-500);
+
+    --info: var(--accent-500);
+
     --primary: var(--primary-500);
 
     --bg-primary: var(--neutral-50);

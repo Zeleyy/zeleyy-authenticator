@@ -1,6 +1,6 @@
 [package]
 name = "zeleyy-authenticator"
-version = "0.1.0"
+version = "0.2.0"
 description = "TOTP authenticator app for managing 2FA codes"
 authors = ["Zeleyy"]
 edition = "2021"
@@ -28,6 +28,7 @@ totp-lite = "2.0.1"
 base32 = "0.5.1"
 data-encoding = "2.10.0"
 tauri-plugin-process = "2"
+tauri-plugin-clipboard-manager = "2"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-updater = "2"

@@ -1,40 +1,33 @@
 import { useContextMenu, useCopyOtp, useDeleteAccount, type Account } from "@/entities/account";
+import { ROUTES } from "@/shared/config";
 import { StatusAlert } from "@/shared/ui";
 import { CodeCard } from "@/widgets/CodeCard";
 import { ContextMenu } from "@/widgets/ContextMenu";
+import { useNavigate } from "react-router-dom";
 
 interface AccountListProps {
-    accounts: Account[]
+    accounts: Account[];
 }
 
-export const AccountList = ({
-    accounts
-}: AccountListProps) => {
+export const AccountList = ({ accounts }: AccountListProps) => {
+    const navigate = useNavigate();
     const { copied, copy } = useCopyOtp();
-    const { menu, openMenu, closeMenu } = useContextMenu<number>();
+    const { menu, openMenu, closeMenu } = useContextMenu<Account>();
     const { mutate: deleteAccount } = useDeleteAccount();
 
-    const handleEdit = () => {
-        if (menu) {
+    const actions = {
+        edit: (account: Account) => {
+            const path = ROUTES.EDIT_ACCOUNT.replace(':accountId', String(account.account_id));
+            navigate(path, { state: { accountName: account.account_name } });
             closeMenu();
-        }
-    };
-
-    const handleDelete = () => {
-        if (menu && confirm("Удалить аккаунт?")) {
-            const accountId = menu.data;
-            console.log("Edit account:", accountId);
+        },
+        delete: (accountId: number) => {
+            if (!confirm("Удалить аккаунт?")) return;
+            
             deleteAccount(accountId, {
-                onSuccess: () => {
-                    console.log("Account deleted successfully");
-                    closeMenu();
-                },
-                onError: (error) => {
-                    console.error("Failed to delete account:", error);
-                    alert("Не удалось удалить аккаунт");
-                }
-            })
-            closeMenu();
+                onSuccess: () => closeMenu(),
+                onError: () => alert("Не удалось удалить аккаунт")
+            });
         }
     };
 
@@ -44,21 +37,22 @@ export const AccountList = ({
                 message="Скопировано в буфер обмена"
                 position="fixed"
                 show={copied}
+                placement="bottom"
                 offsetY={100}
             />
 
-            {accounts.map((item) => (
+            {accounts.map((account) => (
                 <CodeCard
-                    key={item.account_id}
-                    accountId={item.account_id}
-                    issuer={item.issuer}
-                    accountName={item.account_name}
-                    code={item.code}
-                    remainingSeconds={item.remaining_seconds}
-                    interval={item.interval}
-                    onContextMenu={(e) => openMenu(e, item.account_id)}
-                    onCopy={() => copy(item.code)}
-                />        
+                    key={account.account_id}
+                    accountId={account.account_id}
+                    issuer={account.issuer}
+                    accountName={account.account_name}
+                    code={account.code}
+                    remainingSeconds={account.remaining_seconds}
+                    interval={account.interval}
+                    onContextMenu={(e) => openMenu(e, account)}
+                    onCopy={() => copy(account.code)}
+                />
             ))}
 
             {menu && (
@@ -67,8 +61,15 @@ export const AccountList = ({
                     y={menu.y}
                     onClose={closeMenu}
                     items={[
-                        { label: "Изменить", onClick: handleEdit },
-                        { label: "Удалить", onClick: handleDelete, danger: true },
+                        { 
+                            label: "Изменить", 
+                            onClick: () => actions.edit(menu.data) 
+                        },
+                        { 
+                            label: "Удалить", 
+                            onClick: () => actions.delete(menu.data.account_id), 
+                            danger: true 
+                        },
                     ]}
                 />
             )}

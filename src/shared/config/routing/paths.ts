@@ -7,4 +7,5 @@ export const ROUTES = {
         MANUAL: '/add/manual',
         QR: '/add/qr',
     },
+    EDIT_ACCOUNT: '/edit/account/:accountId',
 };

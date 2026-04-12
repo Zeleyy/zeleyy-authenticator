@@ -1,9 +1,7 @@
-import { useCopyOtp } from "@/entities/account";
-import type { Account } from "@/entities/account/model";
-import { StatusAlert } from "@/shared/ui/feedback";
+import { useContextMenu, useCopyOtp, useDeleteAccount, type Account } from "@/entities/account";
+import { StatusAlert } from "@/shared/ui";
 import { CodeCard } from "@/widgets/CodeCard";
 import { ContextMenu } from "@/widgets/ContextMenu";
-import { useContextMenu } from "@/entities/account/hooks";
 
 interface AccountListProps {
     accounts: Account[]
@@ -13,7 +11,8 @@ export const AccountList = ({
     accounts
 }: AccountListProps) => {
     const { copied, copy } = useCopyOtp();
-    const { menu, openMenu, closeMenu } = useContextMenu();
+    const { menu, openMenu, closeMenu } = useContextMenu<number>();
+    const { mutate: deleteAccount } = useDeleteAccount();
 
     const handleEdit = () => {
         if (menu) {
@@ -23,6 +22,18 @@ export const AccountList = ({
 
     const handleDelete = () => {
         if (menu && confirm("Удалить аккаунт?")) {
+            const accountId = menu.data;
+            console.log("Edit account:", accountId);
+            deleteAccount(accountId, {
+                onSuccess: () => {
+                    console.log("Account deleted successfully");
+                    closeMenu();
+                },
+                onError: (error) => {
+                    console.error("Failed to delete account:", error);
+                    alert("Не удалось удалить аккаунт");
+                }
+            })
             closeMenu();
         }
     };
@@ -56,8 +67,8 @@ export const AccountList = ({
                     y={menu.y}
                     onClose={closeMenu}
                     items={[
-                        { label: "Изменить", onClick: () => handleEdit },
-                        { label: "Удалить", onClick: () => handleDelete, danger: true },
+                        { label: "Изменить", onClick: handleEdit },
+                        { label: "Удалить", onClick: handleDelete, danger: true },
                     ]}
                 />
             )}

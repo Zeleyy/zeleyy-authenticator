@@ -1,31 +1,41 @@
-use sqlx::sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions, SqliteSynchronous};
-use sqlx::SqlitePool;
+use r2d2::Pool;
+use r2d2_sqlite::SqliteConnectionManager;
+use rusqlite::OpenFlags;
 use std::path::PathBuf;
-use std::str::FromStr;
 
 pub struct Database;
 
+pub type DbPool = Pool<SqliteConnectionManager>;
+
 impl Database {
-    pub async fn init(
+    pub const CURRENT_DB_NAME: &str = "keystore.db";
+    // pub const LEGACY_DB_NAME: &str = "vault.db";
+
+    pub fn init(
         app_path: &PathBuf,
         master_key: &[u8; 32],
-    ) -> Result<SqlitePool, sqlx::Error> {
-        let db_path = app_path.join("vault.db");
-        let db_url = format!("sqlite:{}?mode=rwc", db_path.to_string_lossy());
+    ) -> Result<DbPool, Box<dyn std::error::Error>> {
+        let db_path = app_path.join(Database::CURRENT_DB_NAME);
         let hex_key: String = master_key.iter().map(|b| format!("{:02x}", b)).collect();
+        
+        let manager = SqliteConnectionManager::file(&db_path)
+            .with_flags(OpenFlags::SQLITE_OPEN_READ_WRITE | OpenFlags::SQLITE_OPEN_CREATE)
+            .with_init(move |conn| {
+                conn.pragma_update(None, "key", &format!("x'{}'", hex_key))?;
+                
+                conn.pragma_update(None, "journal_mode", "WAL")?;
+                conn.pragma_update(None, "synchronous", "NORMAL")?;
+                
+                Ok(())
+            });
 
-        let opts = SqliteConnectOptions::from_str(&db_url)?
-            .create_if_missing(true)
-            .pragma("key", format!("'{}'", hex_key))
-            .journal_mode(SqliteJournalMode::Wal)
-            .synchronous(SqliteSynchronous::Normal);
+        let pool = Pool::builder()
+            .max_size(2)
+            .build(manager)?;
 
-        let pool = SqlitePoolOptions::new()
-            .max_connections(2)
-            .connect_with(opts)
-            .await?;
+        let conn = pool.get()?;
 
-        sqlx::query(
+        conn.execute(
             "CREATE TABLE IF NOT EXISTS accounts (
                 account_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 issuer TEXT NULL,
@@ -35,9 +45,8 @@ impl Database {
                 interval INTEGER DEFAULT 30,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )",
-        )
-        .execute(&pool)
-        .await?;
+            [],
+        )?;
 
         Ok(pool)
     }

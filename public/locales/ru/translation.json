@@ -1,0 +1,125 @@
+{
+    "common": {
+        "appName": "Zeleyy Authenticator",
+        "menu": "Меню",
+        "cancel": "Отмена",
+        "inDevelopment": "В разработке...",
+        "save": "Сохранить",
+        "saving": "Сохранение...",
+        "edit": "Изменить",
+        "delete": "Удалить"
+    },
+    "home": {
+        "search": {
+            "placeholder": "Введите запрос"
+        },
+        "copied": "Скопировано в буфер обмена",
+        "addButton": "Добавить аккаунт",
+        "empty": "Здесь пока нет аккаунтов",
+        "deleteModal": {
+            "confirm": "Удалить аккаунт \"{{name}}\"?",
+            "error": "Не удалось удалить аккаунт"
+        }
+    },
+    "settings": {
+        "title": "Настройки",
+        "appearance": {
+            "title": "Внешний вид",
+            "theme": {
+                "label": "Тема оформления",
+                "description": "Выберите цветовую схему интерфейса"
+            },
+            "language": {
+                "label": "Язык",
+                "description": "Выберите язык интерфейса"
+            }
+        },
+        "security": {
+            "title": "Безопасность",
+            "pin": {
+                "label": "PIN-код",
+                "description": "Запрашивать PIN-код при запуске"
+            }
+        }
+    },
+    "about": {
+        "title": "О приложении",
+        "details": {
+            "title": "Детали",
+            "name": {
+                "label": "Название",
+                "description": "Zeleyy Authenticator"
+            },
+            "author": {
+                "label": "Автор",
+                "description": "Разработчик приложения"
+            }
+        },
+        "updates": {
+            "title": "Обновления",
+            "version": {
+                "label": "Версия приложения",
+                "button": "Обновление"
+            },
+            "modal": {
+                "title": "Проверка обновлений",
+                "current": "Текущая версия",
+                "latest": "Последняя версия",
+                "available": "Доступна новая версия!",
+                "notAvailable": "У вас последняя версия",
+                "updateButton": "Обновить"
+            }
+        },
+        "links": {
+            "title": "Ссылки",
+            "github": {
+                "label": "GitHub",
+                "description": "Исходный код"
+            },
+            "report": {
+                "label": "Сообщить о проблеме",
+                "description": "Bug report или предложение",
+                "link": "Создать issue"
+            }
+        },
+        "license": {
+            "title": "Лицензия",
+            "type": {
+                "label": "Тип лицензии",
+                "description": "Распространяется бесплатно"
+            }
+        }
+    },
+    "add": {
+        "title": "Добавление",
+        "tabs": {
+            "manual": "Вручную",
+            "qr": "По QR"
+        },
+        "manual": {
+            "accountName": {
+                "placeholder": "Название (например, GitHub)"
+            },
+            "secret": {
+                "placeholder": "Секретный ключ (Base32)"
+            },
+            "submit": "Добавить аккаунт",
+            "submitting": "Добавление...",
+            "errors": {
+                "nameTooShort": "Название слишком короткое",
+                "secretTooShort": "Ключ должен быть не менее 16 символов"
+            }
+        }
+    },
+    "edit": {
+        "title": "Редактирование",
+        "name": {
+            "placeholder": "Новое название"
+        },
+        "errors": {
+            "accountIdNotFound": "ID аккаунта не найден",
+            "nameTooShort": "Название слишком короткое",
+            "updateFailed": "Не удалось обновить аккаунт"
+        }
+    }
+}

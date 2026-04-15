@@ -18,11 +18,8 @@ pub fn run() {
             let app_path = app.path().app_local_data_dir()?;
             std::fs::create_dir_all(&app_path)?;
 
-            let pool = tauri::async_runtime::block_on(async {
-                Database::init(&app_path, &master_key)
-                    .await
-                    .expect("Database init failed")
-            });
+            let pool = Database::init(&app_path, &master_key)
+                .expect("Database init failed");
             app.manage(pool);
 
             Ok(())

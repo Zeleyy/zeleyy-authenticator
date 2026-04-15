@@ -1,8 +1,11 @@
 import styles from "./AddLayout.module.scss";
+import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 import { Button, Flex } from "@/shared/ui";
 
 export const AddLayout = () => {
+    const { t } = useTranslation();
+
     return (
         <>
             <header className={styles.addHeader}>
@@ -14,7 +17,7 @@ export const AddLayout = () => {
                         activeClass={styles["addHeader__tab--active"]}
                         fullWidth
                     >
-                        Вручную
+                        {t("add.tabs.manual")}
                     </Button>
                     <Button
                         to="/add/qr"
@@ -23,7 +26,7 @@ export const AddLayout = () => {
                         activeClass={styles["addHeader__tab--active"]}
                         fullWidth
                     >
-                        По QR
+                        {t("add.tabs.qr")}
                     </Button>
                 </Flex>
             </header>

@@ -1,10 +1,12 @@
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button, Flex, Input, StatusAlert } from "@/shared/ui";
 import { useAddManualAccount } from "@/entities/account/hooks";
 
 export const AddManualPage = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const { mutate: addAccount, isPending } = useAddManualAccount();
 
     const [error, setError] = useState("");
@@ -21,14 +23,14 @@ export const AddManualPage = () => {
     const handleSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
 
-        if (formData.accountName.trim().length === 0) return setError("Название слишком короткое");
-        if (formData.secret.trim().length < 16) return setError("Ключ должен быть не менее 16 символов");
+        if (formData.accountName.trim().length === 0) return setError(t("add.manual.errors.nameTooShort"));
+        if (formData.secret.trim().length < 16) return setError(t("add.manual.errors.secretTooShort"));
 
         addAccount(formData, {
             onSuccess: () => navigate("/"),
             onError: (error) => {
                 console.error("Add account error:", error);
-                setError("Не удалось добавить аккаунт");
+                setError(error.toString());
             },
         });
     };
@@ -41,14 +43,14 @@ export const AddManualPage = () => {
                 <Flex direction="column" gap="sm">
                     <Input
                         name="accountName"
-                        placeholder="Название (например, GitHub)"
+                        placeholder={t("add.manual.accountName.placeholder")}
                         value={formData.accountName}
                         onChange={handleChange}
                         disabled={isPending}
                     />
                     <Input
                         name="secret"
-                        placeholder="Секретный ключ (Base32)"
+                        placeholder={t("add.manual.secret.placeholder")}
                         value={formData.secret}
                         onChange={handleChange}
                         disabled={isPending}
@@ -60,7 +62,7 @@ export const AddManualPage = () => {
                     fullWidth
                     disabled={isPending}
                 >
-                    {isPending ? "Добавление..." : "Добавить аккаунт"}
+                    {isPending ? t("add.manual.submitting") : t("add.manual.submit")}
                 </Button>
             </Flex>
         </>

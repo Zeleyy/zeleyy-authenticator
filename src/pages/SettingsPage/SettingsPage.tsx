@@ -1,19 +1,21 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "@/shared/lib/hooks";
-import { Button, Flex, Icon, Switch } from "@/shared/ui";
+import { Button, Flex, Icon, Switch, Select } from "@/shared/ui";
 import { PageSection } from "@/widgets/PageSection";
 import { PreferenceItem } from "@/widgets/PreferenceItem";
 
 export const SettingsPage = () => {
+    const { t, i18n } = useTranslation();
     const { isDark, toggleTheme } = useTheme();
     const [isChecked, setIsChecked] = useState(false);
 
     return (
         <>
-            <PageSection title="Внешний вид">
+            <PageSection title={t("settings.appearance.title")}>
                 <PreferenceItem
-                    label="Тема оформления"
-                    description="Выберите цветовую схему интерфейса"
+                    label={t("settings.appearance.theme.label")}
+                    description={t("settings.appearance.theme.description")}
                     control={
                         <Button variant="outline" onClick={toggleTheme}>
                             {isDark
@@ -23,12 +25,26 @@ export const SettingsPage = () => {
                         </Button>
                     }
                 />
+                <PreferenceItem
+                    label={t("settings.appearance.language.label")}
+                    description={t("settings.appearance.language.description")}
+                    control={
+                        <Select
+                            value={i18n.language}
+                            onChange={(lang) => i18n.changeLanguage(lang)}
+                            options={[
+                                { value: 'ru', label: 'Русский' },
+                                { value: 'en', label: 'English' },
+                            ]}
+                        />
+                    }
+                />
             </PageSection>
 
-            <PageSection title="Безопасность">
+            <PageSection title={t("settings.security.title")}>
                 <PreferenceItem
-                    label="PIN-код"
-                    description="Запрашивать PIN-код при запуске"
+                    label={t("settings.security.pin.label")}
+                    description={t("settings.security.pin.description")}
                     control={
                         <Flex align="center">
                             <Switch

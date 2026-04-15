@@ -1,4 +1,5 @@
 import styles from "./UpdateModal.module.scss";
+import { useTranslation } from "react-i18next";
 import { Button, Flex, Modal, SpinnerLoader } from "@/shared/ui";
 import { useCurrentVersion, useLatestVersion, useUpdateInstall } from "@/features/update";
 
@@ -11,6 +12,7 @@ export const UpdateModal = ({
     open = false,
     onClose,
 }: UpdateModalProps) => {
+    const { t } = useTranslation();
     const { data: currentVersion, isLoading: isLoadingCurrent } = useCurrentVersion();
     const { data: latestVersion, isLoading: isLoadingLatest } = useLatestVersion();
     const { mutate: install, isPending, isError, error } = useUpdateInstall();
@@ -25,7 +27,7 @@ export const UpdateModal = ({
     return (
         <>
             <Modal open={open} onClose={onClose}>
-                <h2 className={styles.updateModal__title}>Проверка обновлений</h2>
+                <h2 className={styles.updateModal__title}>{t("about.updates.modal.title")}</h2>
 
                 {isLoadingCurrent || isLoadingLatest ? (
                     <Flex justify="center">
@@ -35,12 +37,12 @@ export const UpdateModal = ({
                     <>
                         <Flex direction="column" gap="md">
                             <Flex justify="space-between" align="center">
-                                <span>Текущая версия</span>
+                                <span>{t("about.updates.modal.current")}</span>
                                 <span className={styles.updateModal__version}>{currentVersion}</span>
                             </Flex>
                             
                             <Flex justify="space-between" align="center">
-                                <span>Последняя версия</span>
+                                <span>{t("about.updates.modal.latest")}</span>
                                 <span className={styles.updateModal__version}>
                                     {resolvedVersion}
                                 </span>
@@ -48,8 +50,8 @@ export const UpdateModal = ({
 
                             <div className={styles.updateModal__message}>
                                 {hasUpdate
-                                    ? "Доступна новая версия!"
-                                    : "У вас последняя версия"
+                                    ? t("about.updates.modal.available")
+                                    : t("about.updates.modal.notAvailable")
                                 }
                             </div>
                         </Flex>
@@ -58,7 +60,7 @@ export const UpdateModal = ({
                             disabled={!hasUpdate || isPending}
                             onClick={() => install()}
                         >
-                            Обновить
+                            {t("about.updates.modal.updateButton")}
                         </Button>
                     </>
                 )}

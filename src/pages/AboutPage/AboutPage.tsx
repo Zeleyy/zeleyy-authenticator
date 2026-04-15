@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button, Skeleton } from "@/shared/ui";
 import { PageSection } from "@/widgets/PageSection";
 import { PreferenceItem } from "@/widgets/PreferenceItem";
@@ -6,6 +7,7 @@ import { useCurrentVersion } from "@/features/update";
 import { UpdateModal } from "@/widgets/UpdateModal";
 
 export const AboutPage = () => {
+    const { t } = useTranslation();
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
     const handleUpdateModalClose = () => {
@@ -16,23 +18,31 @@ export const AboutPage = () => {
     
     return (
         <>
-            <PageSection title="Детали">
+            <PageSection title={t("about.details.title")}>
                 <PreferenceItem
-                    label="Название"
-                    description="Zeleyy Authenticator"
-                    control={<span style={{ color: 'var(--primary)' }}>Zeleyy</span>}
+                    label={t("about.details.name.label")}
+                    description={t("about.details.name.description")}
+                    control={<span>{t("common.appName")}</span>}
                 />
                 
                 <PreferenceItem
-                    label="Автор"
-                    description="Разработчик приложения"
-                    control={<span>Zeleyy</span>}
+                    label={t("about.details.author.label")}
+                    description={t("about.details.autor.description")}
+                    control={
+                        <a
+                            href="https://github.com/zeleyy"
+                            target="_blank"
+                            data-tauri-drag-window
+                        >
+                            Zeleyy
+                        </a>
+                    }
                 />
             </PageSection>
 
-            <PageSection title="Обновления">
+            <PageSection title={t("about.updates.title")}>
                 <PreferenceItem
-                    label="Версия приложения"
+                    label={t("about.updates.version.label")}
                     description={isLoadingCurrent
                         ? <Skeleton radius="sm" height={19} maxWidth={40}/>
                         : currentVersion
@@ -42,16 +52,16 @@ export const AboutPage = () => {
                             size="small"
                             onClick={() => setIsUpdateModalOpen(true)}    
                         >
-                            обновление
+                            {t("about.updates.version.button")}
                         </Button>
                     }
                 />
             </PageSection>
 
-            <PageSection title="Ссылки">
+            <PageSection title={t("about.links.title")}>
                 <PreferenceItem
-                    label="GitHub"
-                    description="Исходный код"
+                    label={t("about.links.github.label")}
+                    description={t("about.links.github.description")}
                     control={
                         <a
                             href="https://github.com/zeleyy/zeleyy-authenticator"
@@ -64,24 +74,24 @@ export const AboutPage = () => {
                 />
                 
                 <PreferenceItem
-                    label="Сообщить о проблеме"
-                    description="Bug report или предложение"
+                    label={t("about.links.report.label")}
+                    description={t("about.links.report.description")}
                     control={
                         <a
                             href="https://github.com/zeleyy/zeleyy-authenticator/issues/new"
                             target="_blank"
                             data-tauri-drag-window
                         >
-                            Создать issue
+                            {t("about.links.report.link")}
                         </a>
                     }
                 />
             </PageSection>
 
-            <PageSection title="Лицензия">
+            <PageSection title={t("about.license.title")}>
                 <PreferenceItem
-                    label="Тип лицензии"
-                    description="Распространяется бесплатно"
+                    label={t("about.license.type.label")}
+                    description={t("about.license.type.description")}
                     control={<span>MIT License</span>}
                 />
             </PageSection>

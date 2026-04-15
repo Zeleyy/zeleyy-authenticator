@@ -1,7 +1,10 @@
+import { useTranslation } from "react-i18next";
 
 
 export const AddQrPage = () => {
+    const { t } = useTranslation();
+
     return (
-        <div>В разработке...</div>
+        <div>{t("common.inDevelopment")}</div>
     );
 };

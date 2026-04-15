@@ -1,13 +1,22 @@
 import styles from "./MainLayout.module.scss";
 import { useState } from "react";
+import { Outlet, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Outlet } from "react-router-dom";
 import clsx from "clsx";
 import { Button, Flex, Icon, Input } from "@/shared/ui";
 
 export const MainLayout = () => {
     const { t } = useTranslation();
+    const [_, setSearchParams] = useSearchParams();
     const [isOpen, setIsOpen] = useState(false);
+
+    const handleSearch = (value: string) => {
+        if (value) {
+            setSearchParams({ q: value });
+        } else {
+            setSearchParams({});
+        }
+    };
 
     return (
         <>
@@ -16,7 +25,13 @@ export const MainLayout = () => {
                     <Button variant="ghost" className={styles.mainHeader__menuBtn} onClick={() => setIsOpen(true)} aria-label={t("common.menu")}>
                         <Icon name="icon-menu" size={24}/>
                     </Button>
-                    <Input id="search" type="text" placeholder={t("home.search.placeholder")} className={styles.mainHeader__search}/>
+                    <Input
+                        id="search"
+                        type="text"
+                        placeholder={t("home.search.placeholder")}
+                        className={styles.mainHeader__search}
+                        onChange={(e) => handleSearch(e.target.value)}
+                    />
                 </Flex>
             </header>
 

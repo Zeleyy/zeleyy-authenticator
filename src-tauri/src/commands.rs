@@ -53,25 +53,27 @@ pub async fn get_accounts(
     for acc_res in account_iter {
         let acc = acc_res.map_err(|e| e.to_string())?;
         
-        let secret_bytes = base32::decode(
-            Alphabet::Rfc4648 { padding: false },
-            &acc.secret.trim().to_uppercase(),
-        )
-        .ok_or_else(|| format!("Ошибка: секрет {} содержит недопустимые символы", acc.account_name))?;
-
         let interval = acc.interval as u64;
         let now = SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .map_err(|e| e.to_string())?
             .as_secs();
-
-        let code = totp_custom::<Sha1>(interval, acc.digits as u32, &secret_bytes, now);
+        
+        let code_result = match base32::decode(
+            Alphabet::Rfc4648 { padding: false },
+            &acc.secret.trim().to_uppercase(),
+        ) {
+            Some(secret_bytes) => {
+                totp_custom::<Sha1>(interval, acc.digits as u32, &secret_bytes, now)
+            }
+            None => "Error".to_string()
+        };
 
         result.push(AccountWithCode {
             account_id: acc.account_id,
             issuer: acc.issuer,
             account_name: acc.account_name,
-            code,
+            code: code_result,
             remaining_seconds: interval - (now % interval),
         });
     }

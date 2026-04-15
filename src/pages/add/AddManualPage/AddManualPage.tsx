@@ -28,7 +28,7 @@ export const AddManualPage = () => {
             onSuccess: () => navigate("/"),
             onError: (error) => {
                 console.error("Add account error:", error);
-                setError("Не удалось добавить аккаунт");
+                setError(error.toString());
             },
         });
     };

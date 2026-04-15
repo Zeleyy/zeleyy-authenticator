@@ -1,10 +1,12 @@
 use base32::Alphabet;
+use serde::Serialize;
+use tauri::State;
 use std::time::{SystemTime, UNIX_EPOCH};
 use totp_lite::{totp_custom, Sha1};
 
 use crate::vault::database::DbPool;
 
-#[derive(serde::Serialize)]
+#[derive(Serialize)]
 pub struct Account {
     pub account_id: i64,
     pub issuer: Option<String>,
@@ -14,7 +16,7 @@ pub struct Account {
     pub interval: i32,
 }
 
-#[derive(serde::Serialize)]
+#[derive(Serialize)]
 pub struct AccountWithCode {
     pub account_id: i64,
     pub issuer: Option<String>,
@@ -25,7 +27,7 @@ pub struct AccountWithCode {
 
 #[tauri::command]
 pub async fn get_accounts(
-    pool: tauri::State<'_, DbPool>,
+    pool: State<'_, DbPool>,
 ) -> Result<Vec<AccountWithCode>, String> {
     let conn = pool.get().map_err(|e| e.to_string())?;
 
@@ -79,13 +81,23 @@ pub async fn get_accounts(
 
 #[tauri::command]
 pub async fn add_account(
-    pool: tauri::State<'_, DbPool>,
+    pool: State<'_, DbPool>,
     account_name: String,
     secret: String,
     issuer: Option<String>,
     digits: Option<i32>,
     interval: Option<i32>,
 ) -> Result<(), String> {
+    let secret = secret.trim();
+    if secret.is_empty() {
+        return Err("Secret cannot be empty".to_string());
+    }
+
+    match base32::decode(Alphabet::Rfc4648 { padding: false }, &secret) {
+        Some(_) => (),
+        None => return Err("Invalid base32 secret".to_string()),
+    }
+
     let conn = pool.get().map_err(|e| e.to_string())?;
 
     conn.execute(
@@ -94,7 +106,7 @@ pub async fn add_account(
         (
             issuer,
             account_name,
-            secret.to_uppercase(),
+            secret,
             digits.unwrap_or(6),
             interval.unwrap_or(30),
         ),
@@ -106,7 +118,7 @@ pub async fn add_account(
 
 #[tauri::command]
 pub async fn update_account(
-    pool: tauri::State<'_, DbPool>,
+    pool: State<'_, DbPool>,
     account_id: i32,
     new_name: String,
 ) -> Result<(), String> {
@@ -128,7 +140,7 @@ pub async fn update_account(
 
 #[tauri::command]
 pub async fn delete_account(
-    pool: tauri::State<'_, DbPool>,
+    pool: State<'_, DbPool>,
     account_id: i64,
 ) -> Result<(), String> {
     let conn = pool.get().map_err(|e| e.to_string())?;

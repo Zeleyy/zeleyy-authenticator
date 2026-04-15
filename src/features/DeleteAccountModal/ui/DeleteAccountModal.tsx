@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDeleteAccount, type Account } from "@/entities/account";
 import { Button, Flex, Modal, StatusAlert } from "@/shared/ui";
-import { useEffect, useState } from "react";
 
 interface DeleteAccountModalProps {
     open?: boolean;
@@ -13,6 +14,7 @@ export const DeleteAccountModal = ({
     account,
     onClose,
 }: DeleteAccountModalProps) => {
+    const { t } = useTranslation();
     const [error, setError] = useState("");
     const [lastAccount, setLastAccount] = useState(account);
     const { mutate: deleteAccount } = useDeleteAccount();
@@ -34,7 +36,7 @@ export const DeleteAccountModal = ({
                 onClose();
             },
             onError: (error) => {
-                setError("Не удалось удалить аккаунт");
+                setError(t("home.deleteModal.error"));
                 console.error("Delete account error:", error);
             }
         });
@@ -53,18 +55,18 @@ export const DeleteAccountModal = ({
             <Modal open={open} onClose={onClose}>
                 <Flex direction="column" gap="md">
                     <Flex justify="center">
-                        Удалить аккаунт "{displayAccount?.account_name}"?
+                        {t("home.deleteModal.confirm", { name: displayAccount?.account_name })}
                     </Flex>
                     <Flex gap="sm" justify="center">
                         <Button variant="ghost" onClick={onClose}>
-                            Отмена
+                            {t("common.cancel")}
                         </Button>
                         <Button 
                             variant="ghost" 
                             color="var(--red)"
                             onClick={handleDeleteConfirm}
                         >
-                            Удалить
+                            {t("common.delete")}
                         </Button>
                     </Flex>
                 </Flex>

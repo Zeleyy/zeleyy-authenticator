@@ -14,17 +14,16 @@ export const routes: RouteObject[] = [
     },
     {
         element: <SecondaryLayout/>,
-        loader: () => ({ title: 'Secondary' }),
         children: [
             {
                 path: ROUTES.SETTINGS,
                 element: <SettingsPage/>,
-                loader: () => ({ title: 'Настройки', backTo: '/' }),
+                loader: () => ({ titleKey: "settings.title", backTo: "/" }),
             },
             {
                 path: ROUTES.ABOUT,
                 element: <AboutPage/>,
-                loader: () => ({ title: 'О приложении', backTo: '/' }),
+                loader: () => ({ titleKey: "about.title", backTo: "/" }),
             },
             {
                 path: ROUTES.ADD.ROOT,
@@ -35,22 +34,22 @@ export const routes: RouteObject[] = [
                     {
                         path: ROUTES.ADD.MANUAL,
                         element: <AddManualPage/>,
-                        loader: () => ({ title: 'Добавление', backTo: '/' }),
+                        loader: () => ({ titleKey: "add.title", backTo: "/" }),
                     },
                     {
                         path: ROUTES.ADD.QR,
                         element: <AddQrPage/>,
-                        loader: () => ({ title: 'Добавление', backTo: '/' }),
+                        loader: () => ({ titleKey: "add.title", backTo: "/" }),
                     },
                 ],
             },
             {
                 path: ROUTES.EDIT_ACCOUNT,
                 element: <EditPage />,
-                loader: () => ({ title: "Редактирование", backTo: "/" })
+                loader: () => ({ titleKey: "edit.title", backTo: "/" })
             }
         ],
     },
 
-    { path: '*', element: <Navigate to="/" replace /> },
+    { path: "*", element: <Navigate to="/" replace /> },
 ];

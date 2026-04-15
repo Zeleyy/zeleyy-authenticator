@@ -1,0 +1,125 @@
+{
+    "common": {
+        "appName": "Zeleyy Authenticator",
+        "menu": "Menu",
+        "cancel": "Cancel",
+        "inDevelopment": "In development...",
+        "save": "Save",
+        "saving": "Saving...",
+        "edit": "Edit",
+        "delete": "Delete"
+    },
+    "home": {
+        "search": {
+            "placeholder": "Search"
+        },
+        "copied": "Copied to clipboard",
+        "addButton": "Add account",
+        "empty": "There are no accounts here yet",
+        "deleteModal": {
+            "confirm": "Delete \"{{name}}\"?",
+            "error": "Failed to delete account"
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "appearance": {
+            "title": "Appearance",
+            "theme": {
+                "label": "Theme",
+                "description": "Choose interface color scheme"
+            },
+            "language": {
+                "label": "Language",
+                "description": "Choose interface language"
+            }
+        },
+        "security": {
+            "title": "Security",
+            "pin": {
+                "label": "PIN code",
+                "description": "Require PIN code on startup"
+            }
+        }
+    },
+    "about": {
+        "title": "About",
+        "details": {
+            "title": "Details",
+            "name": {
+                "label": "Name",
+                "description": "Zeleyy Authenticator"
+            },
+            "author": {
+                "label": "Author",
+                "description": "Application developer"
+            }
+        },
+        "updates": {
+            "title": "Updates",
+            "version": {
+                "label": "Application version",
+                "button": "Update"
+            },
+            "modal": {
+                "title": "Checking for updates",
+                "current": "Current version",
+                "latest": "Latest version",
+                "available": "New version available!",
+                "notAvailable": "You have the latest version",
+                "updateButton": "Update"
+            }
+        },
+        "links": {
+            "title": "Links",
+            "github": {
+                "label": "GitHub",
+                "description": "Source code"
+            },
+            "report": {
+                "label": "Report a problem",
+                "description": "Bug report or suggestion",
+                "link": "Create issue"
+            }
+        },
+        "license": {
+            "title": "License",
+            "type": {
+                "label": "License type",
+                "description": "Distributed free of charge"
+            }
+        }
+    },
+    "add": {
+        "title": "Add Account",
+        "tabs": {
+            "manual": "Manual",
+            "qr": "By QR"
+        },
+        "manual": {
+            "accountName": {
+                "placeholder": "Name (e.g. GitHub)"
+            },
+            "secret": {
+                "placeholder": "Secret key (Base32)"
+            },
+            "submit": "Add account",
+            "submitting": "Adding...",
+            "errors": {
+                "nameTooShort": "Name is too short",
+                "secretTooShort": "Secret must be at least 16 characters"
+            }
+        }
+    },
+    "edit": {
+        "title": "Edit Account",
+        "name": {
+            "placeholder": "New name"
+        },
+        "errors": {
+            "accountIdNotFound": "Account ID not found",
+            "nameTooShort": "Name is too short",
+            "updateFailed": "Failed to update account"
+        }
+    }
+}

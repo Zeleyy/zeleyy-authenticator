@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useContextMenu, useCopyOtp, type Account } from "@/entities/account";
 import { ROUTES } from "@/shared/config";
 import { StatusAlert } from "@/shared/ui";
@@ -13,6 +14,7 @@ interface AccountListProps {
 
 export const AccountList = ({ accounts }: AccountListProps) => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
     const { copied, copy } = useCopyOtp();
     const { menu, openMenu, closeMenu } = useContextMenu<Account>();
@@ -20,7 +22,7 @@ export const AccountList = ({ accounts }: AccountListProps) => {
     const actions = {
         edit: (account: Account) => {
             closeMenu();
-            const path = ROUTES.EDIT_ACCOUNT.replace(':accountId', String(account.account_id));
+            const path = ROUTES.EDIT_ACCOUNT.replace(":accountId", String(account.account_id));
             navigate(path, { state: { accountName: account.account_name } });
         },
         delete: (account: Account) => {
@@ -32,7 +34,7 @@ export const AccountList = ({ accounts }: AccountListProps) => {
     return (
         <>
             <StatusAlert
-                message="Скопировано в буфер обмена"
+                message={t("home.copied")}
                 position="fixed"
                 show={copied}
                 placement="bottom"
@@ -66,13 +68,13 @@ export const AccountList = ({ accounts }: AccountListProps) => {
                     onClose={closeMenu}
                     items={[
                         { 
-                            label: "Изменить", 
-                            onClick: () => actions.edit(menu.data) 
+                            label: t("common.edit"),
+                            onClick: () => actions.edit(menu.data),
                         },
                         { 
-                            label: "Удалить", 
-                            onClick: () => actions.delete(menu.data), 
-                            danger: true 
+                            label: t("common.delete"),
+                            onClick: () => actions.delete(menu.data),
+                            danger: true,
                         },
                     ]}
                 />

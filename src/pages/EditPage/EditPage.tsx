@@ -1,10 +1,12 @@
-import { type SyntheticEvent, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Flex, Input, Button, StatusAlert } from '@/shared/ui';
-import { useUpdateAccount } from '@/entities/account';
+import { type SyntheticEvent, useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Flex, Input, Button, StatusAlert } from "@/shared/ui";
+import { useUpdateAccount } from "@/entities/account";
 
 export const EditPage = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const { accountId } = useParams<{ accountId: string }>();
     const { state } = useLocation();
     const [error, setError] = useState("");
@@ -14,8 +16,8 @@ export const EditPage = () => {
     const handleSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
 
-        if (!accountId) return setError("ID аккаунта не найден");
-        if (!newName.trim()) return setError("Название слишком короткое");
+        if (!accountId) return setError(t("edit.errors.accountIdNotFound"));
+        if (!newName.trim()) return setError(t("edit.errors.nameTooShort"));
 
         updateAccount(
             { accountId: Number(accountId), newName },
@@ -25,7 +27,7 @@ export const EditPage = () => {
                 },
                 onError: (error) => {
                     console.error("Update error:", error);
-                    setError("Не удалось обновить аккаунт");
+                    setError(t("edit.errors.updateFailed"));
                 }
             }
         );
@@ -37,7 +39,7 @@ export const EditPage = () => {
 
             <Flex as="form" direction="column" gap="md" onSubmit={handleSubmit}>
                 <Input
-                    placeholder="Новое название"
+                    placeholder={t("edit.name.placeholder")}
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
                     disabled={isPending}
@@ -47,7 +49,7 @@ export const EditPage = () => {
                     fullWidth 
                     disabled={isPending || !newName.trim()}
                 >
-                    {isPending ? "Сохранение..." : "Сохранить"}
+                    {isPending ? t("common.saving") : t("common.save")}
                 </Button>
             </Flex>
         </>

@@ -7009,7 +7009,7 @@ dependencies = [
 
 [[package]]
 name = "zeleyy-authenticator"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "base32",
  "data-encoding",

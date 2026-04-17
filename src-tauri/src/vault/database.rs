@@ -17,21 +17,19 @@ impl Database {
     ) -> Result<DbPool, Box<dyn std::error::Error>> {
         let db_path = app_path.join(Database::CURRENT_DB_NAME);
         let hex_key: String = master_key.iter().map(|b| format!("{:02x}", b)).collect();
-        
+
         let manager = SqliteConnectionManager::file(&db_path)
             .with_flags(OpenFlags::SQLITE_OPEN_READ_WRITE | OpenFlags::SQLITE_OPEN_CREATE)
             .with_init(move |conn| {
                 conn.pragma_update(None, "key", &format!("x'{}'", hex_key))?;
-                
+
                 conn.pragma_update(None, "journal_mode", "WAL")?;
                 conn.pragma_update(None, "synchronous", "NORMAL")?;
-                
+
                 Ok(())
             });
 
-        let pool = Pool::builder()
-            .max_size(2)
-            .build(manager)?;
+        let pool = Pool::builder().max_size(2).build(manager)?;
 
         let conn = pool.get()?;
 

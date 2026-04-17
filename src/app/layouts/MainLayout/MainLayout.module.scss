@@ -1,11 +1,14 @@
 .mainHeader {
     position: sticky;
     padding: var(--spacing-sm);
+    margin-top: calc(-1 * var(--safe-top));
+    padding-top: calc(var(--spacing-sm) + var(--safe-top));
     background-color: var(--bg-primary);
     border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
     top: 0;
     flex-shrink: 0;
     z-index: 10;
+    background-clip: padding-box;
 
     &__content {
         position: relative;
@@ -25,7 +28,7 @@
 .fab {
     position: fixed;
     right: var(--spacing-sm);
-    bottom: var(--spacing-sm);
+    bottom: calc(var(--spacing-sm) + var(--safe-bottom));
     z-index: 1000;
 }
 
@@ -57,9 +60,9 @@
 
     &__container {
         position: fixed;
-        top: 0;
+        top: var(--safe-top);
         left: 0;
-        bottom: 0;
+        bottom: var(--safe-bottom);
         z-index: 10001;
         transform: translateX(-100%);
         transition: transform 0.3s ease-in-out;

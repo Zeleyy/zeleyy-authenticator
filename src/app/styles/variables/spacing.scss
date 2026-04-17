@@ -13,4 +13,7 @@
     --border-radius-lg: 12px;
     --border-radius-xl: 20px;
     --border-radius-full: 50%;
+
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
 }

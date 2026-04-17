@@ -11,6 +11,7 @@
   "permissions": [
     "updater:default",
     "process:default",
-    "clipboard-manager:default"
+    "clipboard-manager:default",
+    "os:default"
   ]
 }

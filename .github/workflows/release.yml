@@ -79,7 +79,7 @@ jobs:
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: aarch64-linux-android, armv7-linux-androideabi, i686-linux-android, x86_64-linux-android
+          targets: aarch64-linux-android
 
       - name: install system dependencies
         run: |
@@ -103,6 +103,19 @@ jobs:
         with:
           cmdline-tools-version: 'latest'
           packages: 'platforms;android-34 build-tools;34.0.0 ndk;25.2.9519653'
+
+      - name: Set up Android NDK environment
+        run: |
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
+          echo "NDK_HOME=$ANDROID_HOME/ndk/25.2.9519653" >> $GITHUB_ENV
+          echo "PATH=$ANDROID_HOME/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Create NDK toolchain symlinks
+        run: |
+          NDK_DIR="$ANDROID_HOME/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin"
+          cd $NDK_DIR
+          ln -sf aarch64-linux-android31-clang aarch64-linux-android-clang
+          ln -sf aarch64-linux-android31-clang++ aarch64-linux-android-clang++
 
       - name: install frontend dependencies
         run: npm install

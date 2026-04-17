@@ -1,7 +1,7 @@
 use base32::Alphabet;
 use serde::Serialize;
-use tauri::State;
 use std::time::{SystemTime, UNIX_EPOCH};
+use tauri::State;
 use totp_lite::{totp_custom, Sha1};
 
 use crate::vault::database::DbPool;
@@ -26,9 +26,7 @@ pub struct AccountWithCode {
 }
 
 #[tauri::command]
-pub async fn get_accounts(
-    pool: State<'_, DbPool>,
-) -> Result<Vec<AccountWithCode>, String> {
+pub async fn get_accounts(pool: State<'_, DbPool>) -> Result<Vec<AccountWithCode>, String> {
     let conn = pool.get().map_err(|e| e.to_string())?;
 
     let mut stmt = conn
@@ -52,13 +50,13 @@ pub async fn get_accounts(
 
     for acc_res in account_iter {
         let acc = acc_res.map_err(|e| e.to_string())?;
-        
+
         let interval = acc.interval as u64;
         let now = SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .map_err(|e| e.to_string())?
             .as_secs();
-        
+
         let code_result = match base32::decode(
             Alphabet::Rfc4648 { padding: false },
             &acc.secret.trim().to_uppercase(),
@@ -66,7 +64,7 @@ pub async fn get_accounts(
             Some(secret_bytes) => {
                 totp_custom::<Sha1>(interval, acc.digits as u32, &secret_bytes, now)
             }
-            None => "Error".to_string()
+            None => "Error".to_string(),
         };
 
         result.push(AccountWithCode {
@@ -95,7 +93,7 @@ pub async fn add_account(
         return Err("Secret cannot be empty".to_string());
     }
 
-    match base32::decode(Alphabet::Rfc4648 { padding: false }, &secret) {
+    match base32::decode(Alphabet::Rfc4648 { padding: false }, &secret.to_uppercase()) {
         Some(_) => (),
         None => return Err("Invalid base32 secret".to_string()),
     }
@@ -125,15 +123,12 @@ pub async fn update_account(
     new_name: String,
 ) -> Result<(), String> {
     let conn = pool.get().map_err(|e| e.to_string())?;
-    
+
     conn.execute(
         "UPDATE accounts
         SET account_name = ?1
         WHERE account_id = ?2",
-        (
-            new_name,
-            account_id,
-        )
+        (new_name, account_id),
     )
     .map_err(|e| e.to_string())?;
 
@@ -141,19 +136,11 @@ pub async fn update_account(
 }
 
 #[tauri::command]
-pub async fn delete_account(
-    pool: State<'_, DbPool>,
-    account_id: i64,
-) -> Result<(), String> {
+pub async fn delete_account(pool: State<'_, DbPool>, account_id: i64) -> Result<(), String> {
     let conn = pool.get().map_err(|e| e.to_string())?;
 
-    conn.execute(
-        "DELETE FROM accounts WHERE account_id = ?1",
-        (
-            account_id,
-        )
-    )
-    .map_err(|e| e.to_string())?;
+    conn.execute("DELETE FROM accounts WHERE account_id = ?1", (account_id,))
+        .map_err(|e| e.to_string())?;
 
     Ok(())
 }

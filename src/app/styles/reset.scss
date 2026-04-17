@@ -13,12 +13,27 @@ body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     color: var(--text-primary);
     background-color: var(--bg-primary);
+
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bottom);
+
+    &::after {
+        content: '';
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--safe-bottom);
+        background-color: var(--bg-primary);
+        z-index: 100;
+        pointer-events: none;
+    }
 }
 
 #root {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100%;
     width: 100%;
 }
 

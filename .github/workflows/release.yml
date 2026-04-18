@@ -102,6 +102,19 @@ jobs:
           cmdline-tools-version: 'latest'
           packages: 'platforms;android-34 build-tools;34.0.0 ndk;25.2.9519653'
 
+      - name: Set up NDK environment
+        run: |
+          NDK_PATH=$ANDROID_HOME/ndk/25.2.9519653
+          echo "ANDROID_NDK_HOME=$NDK_PATH" >> $GITHUB_ENV
+          echo "NDK_HOME=$NDK_PATH" >> $GITHUB_ENV
+          echo "$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
+          echo "CC_aarch64-linux-android=$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang" >> $GITHUB_ENV
+          echo "AR_aarch64-linux-android=$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar" >> $GITHUB_ENV
+          
+          cd $NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin
+          ln -sf aarch64-linux-android21-clang aarch64-linux-android-clang
+          ln -sf aarch64-linux-android21-clang++ aarch64-linux-android-clang++
+
       - name: install frontend dependencies
         run: npm install
 

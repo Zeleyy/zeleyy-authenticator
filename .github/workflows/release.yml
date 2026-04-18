@@ -135,6 +135,10 @@ jobs:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          LIBSQLITE3_SYS_USE_PKG_CONFIG: 0
+          OPENSSL_STATIC: 1
+          CFLAGS_aarch64_linux_android: "-I/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/src-tauri/target/aarch64-linux-android/release/build/openssl-sys-aarch64-linux-android/out/openssl-build/include"
+          LDFLAGS_aarch64_linux_android: "-L/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/src-tauri/target/aarch64-linux-android/release/build/openssl-sys-aarch64-linux-android/out/openssl-build/lib"
         with:
           tagName: v__VERSION__
           releaseName: 'v__VERSION__'
@@ -142,3 +146,4 @@ jobs:
           releaseDraft: false
           prerelease: false
           args: --target aarch64-linux-android
+

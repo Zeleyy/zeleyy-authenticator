@@ -88,11 +88,7 @@ jobs:
             libwebkit2gtk-4.1-dev \
             libappindicator3-dev \
             librsvg2-dev \
-            patchelf \
-            perl \
-            make \
-            pkg-config \
-            cmake
+            patchelf
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -105,22 +101,6 @@ jobs:
         with:
           cmdline-tools-version: 'latest'
           packages: 'platforms;android-34 build-tools;34.0.0 ndk;25.2.9519653'
-
-      - name: Set up Android NDK environment
-        run: |
-          ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/25.2.9519653
-          echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT" >> $GITHUB_ENV
-          echo "NDK_HOME=$ANDROID_NDK_ROOT" >> $GITHUB_ENV
-          # Переменная для openssl-sys, чтобы он знал, какой CC использовать
-          echo "CC_aarch64_linux_android=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android31-clang" >> $GITHUB_ENV
-          echo "AR_aarch64_linux_android=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar" >> $GITHUB_ENV
-
-      - name: Create NDK toolchain symlinks
-        run: |
-          NDK_DIR="$ANDROID_HOME/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin"
-          cd $NDK_DIR
-          ln -sf aarch64-linux-android31-clang aarch64-linux-android-clang
-          ln -sf aarch64-linux-android31-clang++ aarch64-linux-android-clang++
 
       - name: install frontend dependencies
         run: npm install
@@ -135,10 +115,6 @@ jobs:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          LIBSQLITE3_SYS_USE_PKG_CONFIG: 0
-          OPENSSL_STATIC: 1
-          CFLAGS_aarch64_linux_android: "-I/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/src-tauri/target/aarch64-linux-android/release/build/openssl-sys-aarch64-linux-android/out/openssl-build/include"
-          LDFLAGS_aarch64_linux_android: "-L/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/src-tauri/target/aarch64-linux-android/release/build/openssl-sys-aarch64-linux-android/out/openssl-build/lib"
         with:
           tagName: v__VERSION__
           releaseName: 'v__VERSION__'

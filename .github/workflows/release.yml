@@ -144,4 +144,4 @@ jobs:
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: false
           prerelease: false
-          args: --target aarch64-linux-android --features bundled-sqlcipher
+          args: --target aarch64-linux-android --features rusqlite/bundled-sqlcipher

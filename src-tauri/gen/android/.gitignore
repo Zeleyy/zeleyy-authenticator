@@ -14,6 +14,3 @@ build
 .cxx
 local.properties
 key.properties
-
-/.tauri
-/tauri.settings.gradle

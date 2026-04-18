@@ -128,20 +128,29 @@ jobs:
         run: npm run tauri android init
   
       - name: Build Android app
-        uses: tauri-apps/tauri-action@v0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           CC_aarch64_linux_android: ${{ env.CC_aarch64_linux_android }}
           AR_aarch64_linux_android: ${{ env.AR_aarch64_linux_android }}
           CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER: ${{ env.CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER }}
           CFLAGS_aarch64_linux_android: ${{ env.CFLAGS_aarch64_linux_android }}
+        run: npm run tauri android build
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
         with:
-          tagName: v__VERSION__
-          releaseName: 'v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
-          releaseDraft: false
+          name: android-apk
+          path: src-tauri/gen/android/app/build/outputs/apk/release/*.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            src-tauri/gen/android/app/build/outputs/apk/release/*.apk
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body: 'See the assets to download this version and install.'
+          draft: false
           prerelease: false
-          args: --target aarch64-linux-android
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

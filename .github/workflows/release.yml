@@ -129,7 +129,7 @@ jobs:
       
       - name: Copy Android icons
         run: |
-          cp -r icons/android/* src-tauri/gen/android/app/src/main/res/
+          cp -r src-tauri/icons/android/* src-tauri/gen/android/app/src/main/res/
           echo "Android icons copied"
   
       - name: Decode keystore

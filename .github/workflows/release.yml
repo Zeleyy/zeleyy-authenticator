@@ -85,18 +85,6 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: aarch64-linux-android,armv7-linux-androideabi
-
-      - name: Install system deps
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libwebkit2gtk-4.1-dev \
-            libappindicator3-dev \
-            librsvg2-dev \
-            patchelf \
-            clang
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -106,32 +94,30 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: latest
-          packages: 'platforms;android-34 build-tools;34.0.0 ndk;25.2.9519653'
-
-      - name: Setup NDK env
-        run: |
-          NDK_PATH=$ANDROID_HOME/ndk/25.2.9519653
-          echo "ANDROID_NDK_HOME=$NDK_PATH" >> $GITHUB_ENV
-          echo "NDK_HOME=$NDK_PATH" >> $GITHUB_ENV
-          echo "$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
 
       - name: Install frontend deps
         run: npm install
 
       - name: Init Android
         run: npm run tauri android init
+      
+      - name: Copy Android icons
+        run: |
+          cp -r src-tauri/icons/android/* src-tauri/gen/android/app/src/main/res/
+
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > upload-keystore.jks
 
       - name: Build APK
         run: npm run tauri android build
       
       - name: Sign APK
         run: |
-          APK_PATH="src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk"
-          SIGNED_APK_PATH="src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk"
+          APK_PATH=$(find src-tauri/gen/android -name "*unsigned.apk" | head -n 1)
+          SIGNED_APK_PATH="${APK_PATH/-unsigned/}"
           
-          $ANDROID_HOME/build-tools/34.0.0/apksigner sign \
+          $ANDROID_HOME/build-tools/*/apksigner sign \
             --ks upload-keystore.jks \
             --ks-pass pass:${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \
             --key-pass pass:${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \
@@ -141,15 +127,14 @@ jobs:
 
       - name: Prepare APK
         run: |
-          APK=$(find src-tauri/gen/android -name "*release*.apk" | head -n 1)
+          APK=$(find src-tauri/gen/android -name "*release.apk" | head -n 1)
           cp "$APK" app.apk
-          echo "APK found at $APK"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: android-apk
-          path: app.apk
+          name: zeleyy-authenticator
+          path: zeleyy-authenticator.apk
 
   release:
     needs: [build-tauri, build-android]

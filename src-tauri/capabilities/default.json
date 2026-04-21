@@ -12,6 +12,7 @@
     "process:default",
     "clipboard-manager:default",
     "clipboard-manager:allow-write-text",
-    "os:default"
+    "os:default",
+    "log:default"
   ]
 }

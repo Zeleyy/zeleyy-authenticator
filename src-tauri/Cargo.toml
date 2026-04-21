@@ -38,4 +38,5 @@ openssl = { version = "0.10", features = ["vendored"] }
 openssl = { version = "0.10.76", features = ["vendored"] }
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-single-instance = "2"
 tauri-plugin-updater = "2"

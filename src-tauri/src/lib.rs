@@ -15,8 +15,15 @@ pub fn run() {
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_opener::init());
 
-    #[cfg(not(any(target_os = "android", target_os = "ios")))]
+    #[cfg(desktop)]
     let builder = builder
+        .plugin(tauri_plugin_single_instance::init(|app, args, _| {
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.unminimize();
+                let _ = window.set_focus();
+            }
+            println!("Second instance attempted with args: {:?}", args);
+        }))
         .plugin(tauri_plugin_updater::Builder::new().build());
 
     builder
@@ -24,8 +31,7 @@ pub fn run() {
             let app_path = app.path().app_local_data_dir()?;
             std::fs::create_dir_all(&app_path)?;
 
-            let pool = Database::init(&app_path, &master_key)
-                .expect("Database init failed");
+            let pool = Database::init(&app_path, &master_key).expect("Database init failed");
             app.manage(pool);
 
             Ok(())

@@ -8,7 +8,7 @@ use crate::vault::{database::Database, keyring::get_or_create_master_key};
 pub fn run() {
     let master_key = get_or_create_master_key().expect("Failed to get master key");
 
-    let mut builder = tauri::Builder::default()
+    let builder = tauri::Builder::default()
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_process::init())
@@ -16,9 +16,8 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init());
 
     #[cfg(not(any(target_os = "android", target_os = "ios")))]
-    {
-        builder = builder.plugin(tauri_plugin_updater::Builder::new().build());
-    }
+    let builder = builder
+        .plugin(tauri_plugin_updater::Builder::new().build());
 
     builder
         .setup(move |app| {

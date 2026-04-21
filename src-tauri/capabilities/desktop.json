@@ -12,6 +12,7 @@
     "updater:default",
     "process:default",
     "clipboard-manager:default",
-    "os:default"
+    "os:default",
+    "log:default"
   ]
 }

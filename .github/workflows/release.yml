@@ -129,11 +129,9 @@ jobs:
   
       - name: Decode keystore
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android.keystore
-          echo "SIGNING_KEYSTORE=$(pwd)/android.keystore" >> $GITHUB_ENV
-          echo "SIGNING_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}" >> $GITHUB_ENV
-          echo "SIGNING_KEY_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> $GITHUB_ENV
-          echo "SIGNING_STORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> $GITHUB_ENV
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > upload-keystore.jks
+          echo "Keystore decoded to $(pwd)/upload-keystore.jks"
+        shell: bash
 
       - name: Build Android app
         env:
@@ -141,11 +139,23 @@ jobs:
           AR_aarch64_linux_android: ${{ env.AR_aarch64_linux_android }}
           CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER: ${{ env.CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER }}
           CFLAGS_aarch64_linux_android: ${{ env.CFLAGS_aarch64_linux_android }}
-          SIGNING_KEYSTORE: ${{ env.SIGNING_KEYSTORE }}
-          SIGNING_KEY_ALIAS: ${{ env.SIGNING_KEY_ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ env.SIGNING_KEY_PASSWORD }}
-          SIGNING_STORE_PASSWORD: ${{ env.SIGNING_STORE_PASSWORD }}
         run: npm run tauri android build
+
+      - name: Sign APK with apksigner
+        run: |
+          APK_PATH="src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk"
+          SIGNED_APK_PATH="src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk"
+          
+          $ANDROID_HOME/build-tools/34.0.0/apksigner sign \
+            --ks upload-keystore.jks \
+            --ks-pass pass:${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \
+            --key-pass pass:${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \
+            --ks-key-alias ${{ secrets.ANDROID_KEY_ALIAS }} \
+            --out $SIGNED_APK_PATH \
+            $APK_PATH
+          
+          echo "APK signed successfully: $SIGNED_APK_PATH"
+        shell: bash
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4

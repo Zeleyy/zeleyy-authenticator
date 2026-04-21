@@ -64,7 +64,13 @@ jobs:
         with:
           name: tauri-${{ matrix.platform }}
           path: |
-            src-tauri/target/release/bundle/**
+            src-tauri/target/**/release/bundle/**/*.dmg
+            src-tauri/target/**/release/bundle/**/*.msi
+            src-tauri/target/**/release/bundle/**/*.exe
+            src-tauri/target/**/release/bundle/**/*.deb
+            src-tauri/target/**/release/bundle/**/*.AppImage
+            src-tauri/target/**/release/bundle/**/*.tar.gz
+            src-tauri/target/**/release/bundle/**/*.sig
 
   build-android:
     runs-on: ubuntu-22.04
@@ -119,10 +125,25 @@ jobs:
 
       - name: Build APK
         run: npm run tauri android build
+      
+      - name: Sign APK
+        run: |
+          APK_PATH="src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk"
+          SIGNED_APK_PATH="src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk"
+          
+          $ANDROID_HOME/build-tools/34.0.0/apksigner sign \
+            --ks upload-keystore.jks \
+            --ks-pass pass:${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \
+            --key-pass pass:${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \
+            --ks-key-alias ${{ secrets.ANDROID_KEY_ALIAS }} \
+            --out $SIGNED_APK_PATH \
+            $APK_PATH
 
       - name: Prepare APK
         run: |
-          cp src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk app.apk
+          APK=$(find src-tauri/gen/android -name "*release*.apk" | head -n 1)
+          cp "$APK" app.apk
+          echo "APK found at $APK"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4

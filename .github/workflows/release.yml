@@ -126,12 +126,16 @@ jobs:
   
       - name: Initialize Android project
         run: npm run tauri android init
+      
+      - name: Copy Android icons
+        run: |
+          cp -r icons/android/* src-tauri/gen/android/app/src/main/res/
+          echo "Android icons copied"
   
       - name: Decode keystore
         run: |
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > upload-keystore.jks
-          echo "Keystore decoded to $(pwd)/upload-keystore.jks"
-        shell: bash
+          echo "Keystore decoded"
 
       - name: Build Android app
         env:
@@ -141,7 +145,7 @@ jobs:
           CFLAGS_aarch64_linux_android: ${{ env.CFLAGS_aarch64_linux_android }}
         run: npm run tauri android build
 
-      - name: Sign APK with apksigner
+      - name: Sign APK
         run: |
           APK_PATH="src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk"
           SIGNED_APK_PATH="src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk"
@@ -154,32 +158,29 @@ jobs:
             --out $SIGNED_APK_PATH \
             $APK_PATH
           
-          echo "APK signed successfully: $SIGNED_APK_PATH"
-        shell: bash
+          echo "APK signed"
+
+      - name: Prepare APK for release
+        run: |
+          cp src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk \
+             zeleyy-authenticator.apk
+          echo "APK prepared with stable filename"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: android-apk
-          path: src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
-
-      - name: Upload AAB artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-aab
-          path: src-tauri/gen/android/app/build/outputs/bundle/universalRelease/*.aab
+          name: zeleyy-authenticator
+          path: zeleyy-authenticator.apk
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: |
-            src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
-            src-tauri/gen/android/app/build/outputs/bundle/universalRelease/*.aab
+          files: zeleyy-authenticator.apk
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
-          body: 'See the assets to download this version and install.'
           draft: false
           prerelease: false
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

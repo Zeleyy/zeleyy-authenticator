@@ -149,8 +149,8 @@ jobs:
 
       - name: Prepare APK
         run: |
-          APK=$(find src-tauri/gen/android -name "*release.apk" | head -n 1)
-          cp "$APK" app.apk
+          cp src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk \
+             zeleyy-authenticator.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4

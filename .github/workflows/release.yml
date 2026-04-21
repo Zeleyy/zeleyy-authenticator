@@ -85,7 +85,9 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-      
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi
+
       - name: Install system deps
         run: |
           sudo apt-get update
@@ -104,6 +106,16 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: latest
+          packages: 'platforms;android-34 build-tools;34.0.0 ndk;25.2.9519653'
+
+      - name: Setup NDK env
+        run: |
+          NDK_PATH=$ANDROID_HOME/ndk/25.2.9519653
+          echo "ANDROID_NDK_HOME=$NDK_PATH" >> $GITHUB_ENV
+          echo "NDK_HOME=$NDK_PATH" >> $GITHUB_ENV
+          echo "$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
 
       - name: Install frontend deps
         run: npm install
@@ -124,10 +136,10 @@ jobs:
       
       - name: Sign APK
         run: |
-          APK_PATH=$(find src-tauri/gen/android -name "*unsigned.apk" | head -n 1)
-          SIGNED_APK_PATH="${APK_PATH/-unsigned/}"
+          APK_PATH="src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk"
+          SIGNED_APK_PATH="src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk"
           
-          $ANDROID_HOME/build-tools/*/apksigner sign \
+          $ANDROID_HOME/build-tools/34.0.0/apksigner sign \
             --ks upload-keystore.jks \
             --ks-pass pass:${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \
             --key-pass pass:${{ secrets.ANDROID_KEYSTORE_PASSWORD }} \

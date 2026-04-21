@@ -183,13 +183,17 @@ jobs:
         tag_name: v${{ steps.get_version.outputs.version }}
         name: v${{ steps.get_version.outputs.version }}
         files: |
-          tauri-*/*.dmg
-          tauri-*/*.msi
-          tauri-*/*.exe
-          tauri-*/*.deb
-          tauri-*/*.AppImage
-          tauri-*/*.tar.gz
-          tauri-*/*.sig
+          tauri-windows-latest/*.msi
+          tauri-windows-latest/*.exe
+          tauri-windows-latest/*.sig
+          tauri-ubuntu-22.04/*.deb
+          tauri-ubuntu-22.04/*.rpm
+          tauri-ubuntu-22.04/*.AppImage
+          tauri-ubuntu-22.04/*.tar.gz
+          tauri-ubuntu-22.04/*.sig
+          tauri-macos-latest/*.dmg
+          tauri-macos-latest/*.tar.gz
+          tauri-macos-latest/*.sig
           zeleyy-authenticator/*.apk
         generate_release_notes: true
       env:

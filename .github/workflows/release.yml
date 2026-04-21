@@ -183,7 +183,14 @@ jobs:
         tag_name: v${{ steps.get_version.outputs.version }}
         name: v${{ steps.get_version.outputs.version }}
         files: |
-          **/*
+          tauri-*/*.dmg
+          tauri-*/*.msi
+          tauri-*/*.exe
+          tauri-*/*.deb
+          tauri-*/*.AppImage
+          tauri-*/*.tar.gz
+          tauri-*/*.sig
+          zeleyy-authenticator/*.apk
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

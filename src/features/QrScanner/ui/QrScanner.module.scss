@@ -1,0 +1,69 @@
+.qrScanner {
+    width: 250px;
+    height: 250px;
+    border: 2px solid var(--primary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    position: relative;
+    background: var(--bg-secondary);
+
+    &__loader {
+        position: absolute;
+        inset: 0;
+        background: var(--bg-tertiary);
+        z-index: 10;
+    }
+
+    &__reader {
+        width: 100%;
+        height: 100%;
+
+        :global(video) {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            
+            background-color: transparent !important;
+        }
+    }
+
+    &__overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px;
+        height: 200px;
+        pointer-events: none;
+    }
+
+    &__corner {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border: 2px solid var(--accent-400);
+        border-radius: var(--border-radius-md);
+        
+        --mask-hor: linear-gradient(to right, black 50%, transparent 0);
+        --mask-ver: linear-gradient(to bottom, black 50%, transparent 0);
+        mask: var(--mask-hor), var(--mask-ver);
+        mask-composite: intersect;
+        
+        &_tl { 
+            top: 0; left: 0; 
+        }
+        &_tr { 
+            top: 0; right: 0; 
+            --mask-hor: linear-gradient(to left, black 50%, transparent 0); 
+        }
+        &_bl { 
+            bottom: 0; left: 0; 
+            --mask-ver: linear-gradient(to top, black 50%, transparent 0); 
+        }
+        &_br { 
+            bottom: 0; right: 0; 
+            --mask-hor: linear-gradient(to left, black 50%, transparent 0);
+            --mask-ver: linear-gradient(to top, black 50%, transparent 0); 
+        }
+    }
+}

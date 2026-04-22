@@ -27,7 +27,7 @@ export const AboutPage = () => {
                 
                 <PreferenceItem
                     label={t("about.details.author.label")}
-                    description={t("about.details.autor.description")}
+                    description={t("about.details.author.description")}
                     control={
                         <a
                             href="https://github.com/zeleyy"

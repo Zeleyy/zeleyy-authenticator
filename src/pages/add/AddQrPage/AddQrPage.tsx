@@ -1,10 +1,11 @@
-import { useTranslation } from "react-i18next";
-
+import { Flex } from "@/shared/ui";
+import { QrScanner } from "@/features/QrScanner";
 
 export const AddQrPage = () => {
-    const { t } = useTranslation();
-
+    // TODO перенос на следующую страницу с подтверждением и отправкой
     return (
-        <div>{t("common.inDevelopment")}</div>
+        <Flex align="center" justify="center">
+            <QrScanner/>
+        </Flex>
     );
 };

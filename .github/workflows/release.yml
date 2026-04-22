@@ -1,48 +1,49 @@
-name: 'publish'
+name: publish
 
 on:
   push:
     branches:
       - main
 
-
 jobs:
-  publish-tauri:
+  build-tauri:
     permissions:
       contents: write
     strategy:
       fail-fast: false
       matrix:
         include:
-          - platform: 'windows-latest'
+          - platform: windows-latest
             args: ''
-          - platform: 'macos-latest'
+          - platform: macos-latest
             args: '--target aarch64-apple-darwin'
-          - platform: 'ubuntu-22.04'
+          - platform: ubuntu-22.04
             args: ''
 
     runs-on: ${{ matrix.platform }}
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: 'npm'
 
-      - name: install Rust stable
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: install dependencies (ubuntu only)
+      - name: Install dependencies (Linux)
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
-      - name: install frontend dependencies
+      - name: Install frontend deps
         run: npm install
-      
-      - name: Install OpenSSL (Windows only)
+
+      - name: Install OpenSSL (Windows)
         if: matrix.platform == 'windows-latest'
         run: |
           choco install openssl -y
@@ -50,7 +51,8 @@ jobs:
           echo "OPENSSL_LIB_DIR=C:\Program Files\OpenSSL\lib" >> $env:GITHUB_ENV
           echo "OPENSSL_INCLUDE_DIR=C:\Program Files\OpenSSL\include" >> $env:GITHUB_ENV
 
-      - uses: tauri-apps/tauri-action@v0
+      - name: Build and Upload to Draft Release
+        uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
@@ -58,30 +60,35 @@ jobs:
         with:
           tagName: v__VERSION__
           releaseName: 'v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
-          releaseDraft: false
+          releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
 
-
-  publish-android:
+  build-android:
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
-    runs-on: ubuntu-22.04
+
     steps:
       - uses: actions/checkout@v4
-  
-      - name: setup node
+
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-  
-      - name: install Rust stable
+      
+      - name: Extract version from package.json
+        id: get_version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "pkg_version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android,armv7-linux-androideabi
-  
-      - name: install system dependencies
+
+      - name: Install system deps
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -90,61 +97,43 @@ jobs:
             librsvg2-dev \
             patchelf \
             clang
-  
-      - name: Set up JDK 17
+
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
-  
+          distribution: temurin
+          java-version: 17
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
-          cmdline-tools-version: 'latest'
+          cmdline-tools-version: latest
           packages: 'platforms;android-34 build-tools;34.0.0 ndk;25.2.9519653'
-  
-      - name: Set up NDK environment
+
+      - name: Setup NDK env
         run: |
           NDK_PATH=$ANDROID_HOME/ndk/25.2.9519653
           echo "ANDROID_NDK_HOME=$NDK_PATH" >> $GITHUB_ENV
           echo "NDK_HOME=$NDK_PATH" >> $GITHUB_ENV
           echo "$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin" >> $GITHUB_PATH
-  
-          cd $NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin
-          ln -sf aarch64-linux-android21-clang aarch64-linux-android-clang
-          ln -sf aarch64-linux-android21-clang++ aarch64-linux-android-clang++
-          ln -sf armv7a-linux-androideabi21-clang arm-linux-androideabi-clang
-          ln -sf armv7a-linux-androideabi21-clang++ arm-linux-androideabi-clang++
-  
-          echo "CC_aarch64_linux_android=$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang" >> $GITHUB_ENV
-          echo "AR_aarch64_linux_android=$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar" >> $GITHUB_ENV
-          echo "CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER=$NDK_PATH/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang" >> $GITHUB_ENV
-          echo "CFLAGS_aarch64_linux_android=-DANDROID -ffunction-sections -fdata-sections -fPIC" >> $GITHUB_ENV
-  
-      - name: install frontend dependencies
+
+      - name: Install frontend deps
         run: npm install
-  
-      - name: Initialize Android project
+
+      - name: Init Android
         run: npm run tauri android init
       
       - name: Copy Android icons
         run: |
           cp -r src-tauri/icons/android/* src-tauri/gen/android/app/src/main/res/
-          echo "Android icons copied"
-  
+
       - name: Decode keystore
         run: |
           echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > upload-keystore.jks
-          echo "Keystore decoded"
 
-      - name: Build Android app
-        env:
-          CC_aarch64_linux_android: ${{ env.CC_aarch64_linux_android }}
-          AR_aarch64_linux_android: ${{ env.AR_aarch64_linux_android }}
-          CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER: ${{ env.CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER }}
-          CFLAGS_aarch64_linux_android: ${{ env.CFLAGS_aarch64_linux_android }}
+      - name: Build APK
         run: npm run tauri android build
-
+      
       - name: Sign APK
         run: |
           APK_PATH="src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk"
@@ -157,30 +146,39 @@ jobs:
             --ks-key-alias ${{ secrets.ANDROID_KEY_ALIAS }} \
             --out $SIGNED_APK_PATH \
             $APK_PATH
-          
-          echo "APK signed"
 
-      - name: Prepare APK for release
+      - name: Prepare APK
         run: |
           cp src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release.apk \
              zeleyy-authenticator.apk
-          echo "APK prepared with stable filename"
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: zeleyy-authenticator
-          path: zeleyy-authenticator.apk
-
-      - name: Create GitHub Release
+      - name: Upload APK to Draft Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: zeleyy-authenticator.apk
-          tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
+          tag_name: v${{ steps.get_version.outputs.pkg_version }}
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-release:
+    needs: [build-tauri, build-android]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from package.json
+        id: get_version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "pkg_version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.get_version.outputs.pkg_version }}
           draft: false
-          prerelease: false
-          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

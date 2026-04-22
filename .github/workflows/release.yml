@@ -71,6 +71,7 @@ jobs:
             src-tauri/target/**/release/bundle/**/*.AppImage
             src-tauri/target/**/release/bundle/**/*.tar.gz
             src-tauri/target/**/release/bundle/**/*.sig
+            src-tauri/target/**/release/bundle/**/latest.json
 
   build-android:
     runs-on: ubuntu-22.04
@@ -186,10 +187,10 @@ jobs:
           **/*.msi
           **/*.exe
           **/*.deb
-          **/*.rpm
           **/*.AppImage
           **/*.dmg
           **/*.tar.gz
+          **/*.sig
           **/latest.json
         generate_release_notes: true
       env:

@@ -71,7 +71,6 @@ jobs:
             src-tauri/target/**/release/bundle/**/*.AppImage
             src-tauri/target/**/release/bundle/**/*.tar.gz
             src-tauri/target/**/release/bundle/**/*.sig
-            src-tauri/target/**/release/bundle/**/latest.json
 
   build-android:
     runs-on: ubuntu-22.04
@@ -166,32 +165,16 @@ jobs:
       contents: write
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
     - name: Download all artifacts
       uses: actions/download-artifact@v4
 
-    - name: Get version from tauri.conf.json
-      id: get_version
-      run: |
-        VERSION=$(jq -r '.version' src-tauri/tauri.conf.json)
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-    - name: Create Release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: v${{ steps.get_version.outputs.version }}
-        name: v${{ steps.get_version.outputs.version }}
-        files: |
-          **/*.msi
-          **/*.exe
-          **/*.deb
-          **/*.AppImage
-          **/*.dmg
-          **/*.tar.gz
-          **/*.sig
-          **/latest.json
-        generate_release_notes: true
+    - name: Create Release + updater
+      uses: tauri-apps/tauri-action@v0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tagName: ${{ github.ref_name }}
+        releaseName: ${{ github.ref_name }}
+        releaseDraft: false
+        prerelease: false
+        args: ""

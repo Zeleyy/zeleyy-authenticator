@@ -165,16 +165,19 @@ jobs:
       contents: write
 
     steps:
-    - name: Download all artifacts
-      uses: actions/download-artifact@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Create Release + updater
-      uses: tauri-apps/tauri-action@v0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tagName: ${{ github.ref_name }}
-        releaseName: ${{ github.ref_name }}
-        releaseDraft: false
-        prerelease: false
-        args: ""
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create Release + updater
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: ${{ github.ref_name }}
+          releaseDraft: false
+          prerelease: false
+          args: ""

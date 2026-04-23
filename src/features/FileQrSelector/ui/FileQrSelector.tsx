@@ -21,7 +21,7 @@ export const FileQrSelector = ({
         try {
             const decodedText = await scanFile("file-scan-temp", file);
             onScan(decodedText);
-        } catch (err) {
+        } catch {
             onError(new Error(t("add.qr.errors.notFound")));
         } finally {
             e.target.value = ""; 

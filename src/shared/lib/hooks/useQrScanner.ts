@@ -29,7 +29,7 @@ export const useQrScanner = () => {
             return await fileScanner.scanFile(file, true);
         } finally {
             setIsLoading(false);
-            try { fileScanner.clear(); } catch (e) {}
+            try { fileScanner.clear(); } catch {}
         }
     }, []);
 

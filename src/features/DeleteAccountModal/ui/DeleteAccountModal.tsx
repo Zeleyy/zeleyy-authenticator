@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDeleteAccount, type Account } from "@/entities/account";
 import { Button, Flex, Modal, StatusAlert } from "@/shared/ui";
@@ -19,12 +19,10 @@ export const DeleteAccountModal = ({
     const [lastAccount, setLastAccount] = useState(account);
     const { mutate: deleteAccount } = useDeleteAccount();
 
-    useEffect(() => {
-        if (account) {
-            setLastAccount(account);
-            setError("");
-        }
-    }, [account]);
+    if (account && account !== lastAccount) {
+        setLastAccount(account);
+        setError("");
+    }
 
     const displayAccount = account || lastAccount;
 

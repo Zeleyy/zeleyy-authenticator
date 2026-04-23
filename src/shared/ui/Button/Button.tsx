@@ -105,7 +105,7 @@ export const Button = <T extends ElementType = 'button'>({
         Component = "a";
     }
 
-    const componentProps: Record<string, any> = {
+    const componentProps: Record<string, unknown> = {
         ...rest,
         className: classNames,
         style: color ? { '--btn-color': color } as CSSProperties : undefined,
@@ -118,7 +118,7 @@ export const Button = <T extends ElementType = 'button'>({
     }
 
     if (Component === Link && to) {
-        (componentProps as LinkProps).to = to;
+        (componentProps as { to: typeof to }).to = to;
     } else if (Component === NavLink && activeClass) {
         componentProps.to = to;
         componentProps.className = ({ isActive }: { isActive: boolean }) => clsx(

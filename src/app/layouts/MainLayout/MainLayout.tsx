@@ -7,7 +7,7 @@ import { Button, Flex, Icon, Input } from "@/shared/ui";
 
 export const MainLayout = () => {
     const { t } = useTranslation();
-    const [_, setSearchParams] = useSearchParams();
+    const [, setSearchParams] = useSearchParams();
     const [isOpen, setIsOpen] = useState(false);
 
     const handleSearch = (value: string) => {

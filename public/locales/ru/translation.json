@@ -9,6 +9,9 @@
         "edit": "Изменить",
         "delete": "Удалить"
     },
+    "error": {
+        "unknown": "Неизвестная ошибка"
+    },
     "home": {
         "search": {
             "placeholder": "Введите запрос"
@@ -108,6 +111,19 @@
             "errors": {
                 "nameTooShort": "Название слишком короткое",
                 "secretTooShort": "Ключ должен быть не менее 16 символов"
+            }
+        },
+        "qr": {
+            "selectFromGallery": "Выбрать из галереи",
+            "errors": {
+                "notFound": "QR-код не найден на изображении",
+                "desktopNotSupported": "Сканирование QR-кода пока недоступно на пк"
+            },
+            "confirm": {
+                "title": "Подтверждение QR",
+                "accountName": {
+                    "placeholder": "Название (например, GitHub)"
+                }
             }
         }
     },

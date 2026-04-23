@@ -122,6 +122,10 @@ jobs:
 
       - name: Init Android
         run: npm run tauri android init
+
+      - name: Sync Android Configuration
+        run: |
+          cp src-tauri/android-config/AndroidManifest.xml src-tauri/gen/android/app/src/main/AndroidManifest.xml
       
       - name: Copy Android icons
         run: |

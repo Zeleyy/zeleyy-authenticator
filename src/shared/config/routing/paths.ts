@@ -5,7 +5,10 @@ export const ROUTES = {
     ADD: {
         ROOT: '/add',
         MANUAL: '/add/manual',
-        QR: '/add/qr',
+        QR: {
+            ROOT: '/add/qr',
+            CONFIRM: '/add/qr/confirm',
+        },
     },
     EDIT_ACCOUNT: '/edit/account/:accountId',
 };

@@ -1,8 +1,8 @@
 use base32::Alphabet;
 use serde::Serialize;
-use tauri_plugin_log::log;
 use std::time::{SystemTime, UNIX_EPOCH};
 use tauri::State;
+use tauri_plugin_log::log;
 use totp_lite::{totp_custom, Sha1};
 
 use crate::vault::database::DbPool;
@@ -129,24 +129,33 @@ pub async fn update_account(
     account_id: i32,
     new_name: String,
 ) -> Result<(), String> {
-    log::info!("Updating account ID {}: new name '{}'", account_id, new_name);
+    log::info!(
+        "Updating account ID {}: new name '{}'",
+        account_id,
+        new_name
+    );
     let conn = pool.get().map_err(|e| e.to_string())?;
 
-    let rows_affected = conn.execute(
-        "UPDATE accounts
+    let rows_affected = conn
+        .execute(
+            "UPDATE accounts
         SET account_name = ?1
         WHERE account_id = ?2",
-        (new_name, account_id),
-    )
-    .map_err(|e| {
-        log::error!("Failed to update account ID {}: {}", account_id, e);
-        e.to_string()
-    })?;
+            (new_name, account_id),
+        )
+        .map_err(|e| {
+            log::error!("Failed to update account ID {}: {}", account_id, e);
+            e.to_string()
+        })?;
 
     if rows_affected == 0 {
         log::warn!("Account ID {} not found for update", account_id);
     } else {
-        log::info!("Account ID {} updated successfully ({} row(s) affected)", account_id, rows_affected);
+        log::info!(
+            "Account ID {} updated successfully ({} row(s) affected)",
+            account_id,
+            rows_affected
+        );
     }
 
     Ok(())
@@ -157,16 +166,21 @@ pub async fn delete_account(pool: State<'_, DbPool>, account_id: i64) -> Result<
     log::info!("Deleting account ID: {}", account_id);
     let conn = pool.get().map_err(|e| e.to_string())?;
 
-    let rows_affected = conn.execute("DELETE FROM accounts WHERE account_id = ?1", (account_id,))
+    let rows_affected = conn
+        .execute("DELETE FROM accounts WHERE account_id = ?1", (account_id,))
         .map_err(|e| {
             log::error!("Failed to delete account ID {}: {}", account_id, e);
             e.to_string()
         })?;
-    
+
     if rows_affected == 0 {
         log::warn!("Account ID {} not found for deletion", account_id);
     } else {
-        log::info!("Account ID {} deleted successfully ({} row(s) affected)", account_id, rows_affected);
+        log::info!(
+            "Account ID {} deleted successfully ({} row(s) affected)",
+            account_id,
+            rows_affected
+        );
     }
 
     Ok(())

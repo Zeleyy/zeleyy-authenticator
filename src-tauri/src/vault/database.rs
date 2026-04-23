@@ -1,8 +1,8 @@
 use r2d2::Pool;
 use r2d2_sqlite::SqliteConnectionManager;
 use rusqlite::OpenFlags;
-use tauri_plugin_log::log::info;
 use std::path::PathBuf;
+use tauri_plugin_log::log::info;
 
 pub struct Database;
 

@@ -16,6 +16,8 @@ body {
 
     padding-top: var(--safe-top);
     padding-bottom: var(--safe-bottom);
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
 
     &::after {
         content: '';
@@ -63,4 +65,8 @@ p {
     color: var(--text-secondary);
     line-height: 1.6;
     font-weight: 300;
+}
+
+video::-webkit-media-controls-enclosure {
+    display: none !important;
 }

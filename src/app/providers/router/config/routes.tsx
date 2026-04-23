@@ -1,6 +1,6 @@
 import { Navigate, type RouteObject } from "react-router-dom";
 import { ROUTES } from "@/shared/config";
-import { AboutPage, AddManualPage, AddQrPage, EditPage, HomePage, SettingsPage } from "@/pages";
+import { AboutPage, AddManualPage, AddQrPage, EditPage, HomePage, QrConfirmPage, SettingsPage } from "@/pages";
 import { AddLayout, MainLayout, SecondaryLayout } from "@/app/layouts";
 
 
@@ -37,9 +37,14 @@ export const routes: RouteObject[] = [
                         loader: () => ({ titleKey: "add.title", backTo: "/" }),
                     },
                     {
-                        path: ROUTES.ADD.QR,
+                        path: ROUTES.ADD.QR.ROOT,
                         element: <AddQrPage/>,
                         loader: () => ({ titleKey: "add.title", backTo: "/" }),
+                    },
+                    {
+                        path: ROUTES.ADD.QR.CONFIRM,
+                        element: <QrConfirmPage/>,
+                        loader: () => ({ titleKey: "add.title", backTo: ROUTES.ADD.QR.ROOT }),
                     },
                 ],
             },
@@ -47,7 +52,7 @@ export const routes: RouteObject[] = [
                 path: ROUTES.EDIT_ACCOUNT,
                 element: <EditPage />,
                 loader: () => ({ titleKey: "edit.title", backTo: "/" })
-            }
+            },
         ],
     },
 

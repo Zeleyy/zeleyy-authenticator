@@ -7,3 +7,11 @@ export interface Account {
     code: string;
     remaining_seconds: number;
 }
+
+export interface CreateAccountDto {
+    accountName: string;
+    secret: string;
+    issuer?: string;
+    digits?: number;
+    interval?: number;
+}

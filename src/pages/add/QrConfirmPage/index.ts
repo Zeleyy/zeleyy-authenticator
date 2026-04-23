@@ -1,0 +1,1 @@
+export { QrConfirmPage } from "./QrConfirmPage";

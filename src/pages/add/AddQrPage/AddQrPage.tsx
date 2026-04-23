@@ -1,10 +1,45 @@
-import { useTranslation } from "react-i18next";
-
+import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Flex, StatusAlert } from "@/shared/ui";
+import { QrScanner } from "@/features/QrScanner";
+import { FileQrSelector } from "@/features/FileQrSelector";
+import { ROUTES } from "@/shared/config";
 
 export const AddQrPage = () => {
-    const { t } = useTranslation();
+    const navigate = useNavigate();
+    const [error, setError] = useState<string>("");
+
+    const handleScan = useCallback((data: string) => {
+        if (!data) return;
+        navigate(ROUTES.ADD.QR.CONFIRM, { state: { qrData: data } });
+    }, [navigate]);
+
+    const handleError = useCallback((err: Error) => {
+        setError(err.message);
+        console.error("QR Scan Error:", err);
+    }, []);
 
     return (
-        <div>{t("common.inDevelopment")}</div>
+        <>
+            <StatusAlert
+                message={error}
+                variant="error"
+                position="fixed"
+                placement="bottom"
+                offsetY={100}
+            />
+
+            <Flex direction="column" gap="xl" align="center" justify="center" mb="xl">
+                <QrScanner
+                    onScan={handleScan}
+                    onError={handleError}
+                />
+
+                <FileQrSelector
+                    onScan={handleScan}
+                    onError={handleError}
+                />
+            </Flex>
+        </>
     );
 };

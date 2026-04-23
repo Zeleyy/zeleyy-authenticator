@@ -1,6 +1,8 @@
 .secondaryHeader {
     position: sticky;
     padding: var(--spacing-sm);
+    margin-top: calc(-1 * var(--safe-top));
+    padding-top: calc(var(--spacing-sm) + var(--safe-top));
     background-color: var(--bg-primary);
     border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
     top: 0;

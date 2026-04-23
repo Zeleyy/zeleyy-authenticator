@@ -27,7 +27,7 @@
 
 .fab {
     position: fixed;
-    right: var(--spacing-sm);
+    right: calc(var(--spacing-sm) + var(--safe-right));
     bottom: calc(var(--spacing-sm) + var(--safe-bottom));
     z-index: 1000;
 }

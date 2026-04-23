@@ -1,8 +1,8 @@
 import styles from "./QrScanner.module.scss";
-import { useEffect, useRef, useState } from "react";
-import { Html5Qrcode } from "html5-qrcode";
+import { useEffect } from "react";
 import clsx from "clsx";
 import { Flex, SpinnerLoader } from "@/shared/ui";
+import { useQrScanner } from "@/shared/lib/hooks";
 
 interface QrScannerProps {
     onScan: (data: string) => void;
@@ -13,48 +13,40 @@ export const QrScanner = ({
     onScan,
     onError,
 }: QrScannerProps) => {
-    const scannerRef = useRef<Html5Qrcode | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const { getInstance, cleanUp, isLoading, setIsLoading } = useQrScanner();
 
     useEffect(() => {
-        const html5QrCode = new Html5Qrcode("reader");
-        scannerRef.current = html5QrCode;
+        const html5QrCode = getInstance("reader");
 
         const startScanner = async () => {
-            await html5QrCode.start(
-                { facingMode: "environment" },
-                {
-                    fps: 15,
-                    qrbox: { width: 250, height: 250 },
-                    aspectRatio: 1.0,
-                },
-                async (text) => {
-                    try {
-                        await html5QrCode.stop();
-                        onScan(text);
-                    } catch (error) {
-                        onError?.(error as Error);
-                    }
-                },
-                () => {}
-            );
-        };
-
-        try {
             setIsLoading(true);
-            startScanner();
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
-
-        return () => {
-            if (scannerRef.current?.isScanning) {
-                scannerRef.current.stop().catch(console.error);
+            try {
+                await html5QrCode.start(
+                    { facingMode: "environment" },
+                    {
+                        fps: 15,
+                        qrbox: { width: 250, height: 250 },
+                        aspectRatio: 1.0,
+                    },
+                    async (text) => {
+                        cleanUp();
+                        onScan(text);
+                    },
+                    () => {}
+                );
+            } catch (error) {
+                onError?.(error as Error);
+            } finally {
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 400);
             }
         };
-    }, [onScan, onError]);
+
+        startScanner();
+
+        return () => { cleanUp(); };
+    }, [onScan, onError, getInstance, cleanUp, setIsLoading]);
 
     return (
         <div className={styles.qrScanner}>

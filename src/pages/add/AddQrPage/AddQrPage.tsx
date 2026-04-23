@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Flex, StatusAlert } from "@/shared/ui";
 import { QrScanner } from "@/features/QrScanner";
+import { FileQrSelector } from "@/features/FileQrSelector";
 import { ROUTES } from "@/shared/config";
 
 export const AddQrPage = () => {
@@ -28,8 +29,13 @@ export const AddQrPage = () => {
                 offsetY={100}
             />
 
-            <Flex align="center" justify="center" direction="column">
+            <Flex direction="column" gap="xl" align="center" justify="center" mb="xl">
                 <QrScanner
+                    onScan={handleScan}
+                    onError={handleError}
+                />
+
+                <FileQrSelector
                     onScan={handleScan}
                     onError={handleError}
                 />

@@ -1,0 +1,1 @@
+export { FileQrSelector } from "./FileQrSelector";

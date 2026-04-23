@@ -116,7 +116,8 @@
         "qr": {
             "selectFromGallery": "Choose from gallery",
             "errors": {
-                "notFound": "No QR code found in this image"
+                "notFound": "No QR code found in this image",
+                "desktopNotSupported": "QR code scanning is not yet available on PC"
             },
             "confirm": {
                 "title": "Confirm QR Code",

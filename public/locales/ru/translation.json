@@ -116,7 +116,8 @@
         "qr": {
             "selectFromGallery": "Выбрать из галереи",
             "errors": {
-                "notFound": "QR-код не найден на изображении"
+                "notFound": "QR-код не найден на изображении",
+                "desktopNotSupported": "Сканирование QR-кода пока недоступно на пк"
             },
             "confirm": {
                 "title": "Подтверждение QR",

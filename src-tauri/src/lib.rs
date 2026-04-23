@@ -8,7 +8,7 @@ use crate::vault::{database::Database, keyring::get_or_create_master_key};
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     log::info!("Starting application...");
-    
+
     let builder = tauri::Builder::default()
         .plugin(
             tauri_plugin_log::Builder::new()
@@ -20,7 +20,7 @@ pub fn run() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_opener::init());
-    
+
     #[cfg(desktop)]
     let builder = builder
         .plugin(tauri_plugin_single_instance::init(|app, _, _| {
@@ -28,14 +28,12 @@ pub fn run() {
             if let Some(window) = app.get_webview_window("main") {
                 let _ = window.unminimize();
                 let _ = window.set_focus();
-            }    
+            }
         }))
         .plugin(tauri_plugin_updater::Builder::new().build());
 
-
     #[cfg(target_os = "android")]
     android_keyring::set_android_keyring_credential_builder().unwrap();
-
 
     let master_key = match get_or_create_master_key() {
         Ok(master_key) => master_key,

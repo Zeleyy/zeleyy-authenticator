@@ -2,12 +2,12 @@ import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button, Flex, Input, StatusAlert } from "@/shared/ui";
-import { useAddManualAccount } from "@/entities/account/hooks";
+import { useAddAccount } from "@/entities/account";
 
 export const AddManualPage = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { mutate: addAccount, isPending } = useAddManualAccount();
+    const { mutate: addAccount, isPending } = useAddAccount();
 
     const [error, setError] = useState("");
     const [formData, setFormData] = useState({

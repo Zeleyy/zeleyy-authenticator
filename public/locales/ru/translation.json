@@ -9,6 +9,9 @@
         "edit": "Изменить",
         "delete": "Удалить"
     },
+    "error": {
+        "unknown": "Неизвестная ошибка"
+    },
     "home": {
         "search": {
             "placeholder": "Введите запрос"
@@ -108,6 +111,14 @@
             "errors": {
                 "nameTooShort": "Название слишком короткое",
                 "secretTooShort": "Ключ должен быть не менее 16 символов"
+            }
+        },
+        "qr": {
+            "confirm": {
+                "title": "Подтверждение QR",
+                "accountName": {
+                    "placeholder": "Название (например, GitHub)"
+                }
             }
         }
     },

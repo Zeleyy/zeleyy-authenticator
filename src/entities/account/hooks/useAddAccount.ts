@@ -1,16 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import { invoke } from "@tauri-apps/api/core";
 import { queryClient } from "@/shared/api";
+import type { CreateAccountDto } from "../model";
 
-interface AddManualAccountParams {
-    accountName: string;
-    secret: string;
-}
-
-export const useAddManualAccount = () => {
+export const useAddAccount = () => {
     return useMutation({
-        mutationFn: async ({ accountName, secret }: AddManualAccountParams) => {
-            await invoke("add_account", { accountName, secret });
+        mutationFn: async (payload: CreateAccountDto) => {
+            await invoke("add_account", { ...payload });
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["accounts"] });

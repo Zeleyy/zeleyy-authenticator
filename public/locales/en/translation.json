@@ -9,6 +9,9 @@
         "edit": "Edit",
         "delete": "Delete"
     },
+    "error": {
+        "unknown": "Unknown error"
+    },
     "home": {
         "search": {
             "placeholder": "Search"
@@ -108,6 +111,14 @@
             "errors": {
                 "nameTooShort": "Name is too short",
                 "secretTooShort": "Secret must be at least 16 characters"
+            }
+        },
+        "qr": {
+            "confirm": {
+                "title": "Confirm QR Code",
+                "accountName": {
+                    "placeholder": "Name (e.g. GitHub)"
+                }
             }
         }
     },

@@ -4,7 +4,15 @@ import { Html5Qrcode } from "html5-qrcode";
 import clsx from "clsx";
 import { Flex, SpinnerLoader } from "@/shared/ui";
 
-export const QrScanner = () => {
+interface QrScannerProps {
+    onScan: (data: string) => void;
+    onError?: (error: Error) => void;
+}
+
+export const QrScanner = ({
+    onScan,
+    onError,
+}: QrScannerProps) => {
     const scannerRef = useRef<Html5Qrcode | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -21,8 +29,12 @@ export const QrScanner = () => {
                     aspectRatio: 1.0,
                 },
                 async (text) => {
-                    alert(text);
-                    console.log(text)
+                    try {
+                        await html5QrCode.stop();
+                        onScan(text);
+                    } catch (error) {
+                        onError?.(error as Error);
+                    }
                 },
                 () => {}
             );
@@ -42,7 +54,7 @@ export const QrScanner = () => {
                 scannerRef.current.stop().catch(console.error);
             }
         };
-    }, []);
+    }, [onScan, onError]);
 
     return (
         <div className={styles.qrScanner}>

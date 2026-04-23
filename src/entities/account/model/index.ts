@@ -1,1 +1,1 @@
-export type { Account } from "./types";
+export type { Account, CreateAccountDto } from "./types";

@@ -1,0 +1,1 @@
+export { parseQrData } from "./parseQrData";

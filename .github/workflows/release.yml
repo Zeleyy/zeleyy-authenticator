@@ -173,11 +173,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download APK artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: android-apk
-
       - name: Extract version
         id: get_version
         run: |

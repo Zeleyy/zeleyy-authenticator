@@ -181,14 +181,12 @@ jobs:
 
       - name: Patch Remote latest.json and Publicize Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG="v${{ steps.get_version.outputs.pkg_version }}"
           REPO="${{ github.repository }}"
           APK_NAME="zeleyy-authenticator.apk"
           
-          gh release upload $TAG "$APK_NAME" --repo "$REPO" --clobber
-
           gh release download $TAG --repo "$REPO" --pattern "latest.json"
 
           APK_URL="https://github.com/$REPO/releases/download/$TAG/$APK_NAME"

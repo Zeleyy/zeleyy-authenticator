@@ -51,7 +51,7 @@ jobs:
           echo "OPENSSL_LIB_DIR=C:\Program Files\OpenSSL\lib" >> $env:GITHUB_ENV
           echo "OPENSSL_INCLUDE_DIR=C:\Program Files\OpenSSL\include" >> $env:GITHUB_ENV
 
-      - name: Build Desktop
+      - name: Build and Upload to Draft Release
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -59,15 +59,10 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
           tagName: v__VERSION__
+          releaseName: 'v__VERSION__'
           releaseDraft: true
+          prerelease: false
           args: ${{ matrix.args }}
-
-      - name: Upload updater JSON artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: updater-json-${{ runner.os }}
-          path: src-tauri/target/release/bundle/**/latest.json
-          overwrite: true
 
   build-android:
     runs-on: ubuntu-22.04
@@ -170,12 +165,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-apk
-          path: zeleyy-authenticator.apk
-
   publish-release:
     needs: [build-tauri, build-android]
     runs-on: ubuntu-latest
@@ -184,38 +173,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download all artifacts
+      - name: Download APK artifact
         uses: actions/download-artifact@v4
         with:
-          path: all-artifacts
+          name: android-apk
 
       - name: Extract version
         id: get_version
         run: |
-          echo "pkg_version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+          VERSION=$(node -p "require('./package.json').version")
+          echo "pkg_version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Patch latest.json for Android
-        run: |
-          VERSION="${{ steps.get_version.outputs.pkg_version }}"
-          APK_URL="https://github.com/Zeleyy/zeleyy-authenticator/releases/download/v$VERSION/zeleyy-authenticator.apk"
-          
-          JSON_PATH=$(find all-artifacts -name "latest.json" | head -n 1)
-          
-          if [ -z "$JSON_PATH" ]; then
-            exit 1
-          fi
-          
-          jq --arg url "$APK_URL" '. + {android_url: $url}' "$JSON_PATH" > latest_patched.json
-          
-          mv latest_patched.json latest.json
-
-      - name: Finalize Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ steps.get_version.outputs.pkg_version }}
-          draft: false
-          files: |
-            latest.json
-            all-artifacts/android-apk/*.apk
+      - name: Patch Remote latest.json and Publicize Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="v${{ steps.get_version.outputs.pkg_version }}"
+          REPO="${{ github.repository }}"
+          APK_NAME="zeleyy-authenticator.apk"
+          
+          gh release upload $TAG "$APK_NAME" --repo "$REPO" --clobber
+
+          gh release download $TAG --repo "$REPO" --pattern "latest.json"
+
+          APK_URL="https://github.com/$REPO/releases/download/$TAG/$APK_NAME"
+          jq --arg url "$APK_URL" '. + {android_url: $url}' latest.json > latest_patched.json
+          
+          gh release upload $TAG latest_patched.json:latest.json --repo "$REPO" --clobber
+
+          gh release edit $TAG --draft=false --repo "$REPO"

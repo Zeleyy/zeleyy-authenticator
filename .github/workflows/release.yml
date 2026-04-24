@@ -190,8 +190,9 @@ jobs:
           gh release download $TAG --repo "$REPO" --pattern "latest.json"
 
           APK_URL="https://github.com/$REPO/releases/download/$TAG/$APK_NAME"
-          jq --arg url "$APK_URL" '. + {android_url: $url}' latest.json > latest.json
+          jq --arg url "$APK_URL" '. + {android_url: $url}' latest.json > latest_updated.json
           
-          gh release upload $TAG latest.json:latest.json --repo "$REPO" --clobber
+          mv latest_updated.json latest.json
+          gh release upload $TAG latest.json --repo "$REPO" --clobber
 
           gh release edit $TAG --draft=false --repo "$REPO"

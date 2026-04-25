@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "zeleyy-authenticator",
+  "productName": "Zeleyy Authenticator",
   "version": "../package.json",
   "identifier": "ru.zeleyy.zeleyy-authenticator",
   "build": {
@@ -13,7 +13,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "zeleyy-authenticator",
+        "title": "Zeleyy Authenticator",
         "width": 400,
         "height": 600
       }

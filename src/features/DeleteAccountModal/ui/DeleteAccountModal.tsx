@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDeleteAccount, type Account, type AccountUI } from "@/entities/account";
+import { useDeleteAccount, type AccountUI } from "@/entities/account";
 import { Button, Flex, Modal, StatusAlert } from "@/shared/ui";
 
 interface DeleteAccountModalProps {

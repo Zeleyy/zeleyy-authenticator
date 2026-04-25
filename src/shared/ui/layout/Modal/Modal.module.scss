@@ -4,7 +4,6 @@
         inset: 0;
         z-index: 10000;
         background-color: rgba(0, 0, 0, 0);
-        backdrop-filter: blur(0px);
         transition: 
             background-color 0.3s ease-in-out, 
             backdrop-filter 0.3s ease-in-out,
@@ -13,8 +12,7 @@
         pointer-events: none;
 
         &--open {
-            background-color: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
+            background-color: rgba(0, 0, 0, 0.6);
             visibility: visible;
             pointer-events: auto;
 

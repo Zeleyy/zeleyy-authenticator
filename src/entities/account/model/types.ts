@@ -1,11 +1,15 @@
 export interface Account {
-    account_id: number;
+    accountId: number;
     issuer?: string;
-    account_name: string;
+    accountName: string;
     digits: number;
     interval: number;
     code: string;
-    remaining_seconds: number;
+    remainingSeconds: number;
+}
+
+export interface AccountUI extends Account {
+    displayName: string;
 }
 
 export interface CreateAccountDto {

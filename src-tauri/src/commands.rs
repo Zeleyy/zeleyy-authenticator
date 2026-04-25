@@ -18,6 +18,7 @@ pub struct Account {
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct AccountWithCode {
     pub account_id: i64,
     pub issuer: Option<String>,

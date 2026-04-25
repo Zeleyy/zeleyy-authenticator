@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { check } from "@tauri-apps/plugin-updater";
 
-export const useLatestVersion = () => {
+export const useLatestVersion = ({ enabled = true }: { enabled: boolean }) => {
     return useQuery({
         queryKey: ["last", "version"],
         queryFn: async (): Promise<string | null> => {
@@ -14,5 +14,6 @@ export const useLatestVersion = () => {
             }
         },
         staleTime: 10 * 60 * 1000,
+        enabled: enabled,
     });
 };

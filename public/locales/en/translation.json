@@ -70,7 +70,8 @@
                 "latest": "Latest version",
                 "available": "New version available!",
                 "notAvailable": "You have the latest version",
-                "updateButton": "Update"
+                "updateButton": "Update",
+                "goToReleases": "Go to Releases"
             }
         },
         "links": {

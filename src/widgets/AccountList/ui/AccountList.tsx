@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useContextMenu, useCopyOtp, type Account } from "@/entities/account";
+import { useContextMenu, useCopyOtp, type AccountUI } from "@/entities/account";
 import { ROUTES } from "@/shared/config";
 import { StatusAlert } from "@/shared/ui";
 import { CodeCard } from "@/widgets/CodeCard";
@@ -9,23 +9,23 @@ import { ContextMenu } from "@/widgets/ContextMenu";
 import { DeleteAccountModal } from "@/features/DeleteAccountModal";
 
 interface AccountListProps {
-    accounts: Account[];
+    accounts: AccountUI[];
 }
 
 export const AccountList = ({ accounts }: AccountListProps) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+    const [selectedAccount, setSelectedAccount] = useState<AccountUI | null>(null);
     const { copied, copy } = useCopyOtp();
-    const { menu, openMenu, closeMenu } = useContextMenu<Account>();
+    const { menu, openMenu, closeMenu } = useContextMenu<AccountUI>();
 
     const actions = {
-        edit: (account: Account) => {
+        edit: (account: AccountUI) => {
             closeMenu();
-            const path = ROUTES.EDIT_ACCOUNT.replace(":accountId", String(account.account_id));
-            navigate(path, { state: { accountName: account.account_name } });
+            const path = ROUTES.EDIT_ACCOUNT.replace(":accountId", String(account.accountId));
+            navigate(path, { state: { accountName: account.accountName } });
         },
-        delete: (account: Account) => {
+        delete: (account: AccountUI) => {
             closeMenu();
             setSelectedAccount(account);
         }
@@ -49,12 +49,11 @@ export const AccountList = ({ accounts }: AccountListProps) => {
 
             {accounts.map((account) => (
                 <CodeCard
-                    key={account.account_id}
-                    accountId={account.account_id}
-                    issuer={account.issuer}
-                    accountName={account.account_name}
+                    key={account.accountId}
+                    accountId={account.accountId}
+                    displayName={account.displayName}
                     code={account.code}
-                    remainingSeconds={account.remaining_seconds}
+                    remainingSeconds={account.remainingSeconds}
                     interval={account.interval}
                     onContextMenu={(e) => openMenu(e, account)}
                     onCopy={() => copy(account.code)}

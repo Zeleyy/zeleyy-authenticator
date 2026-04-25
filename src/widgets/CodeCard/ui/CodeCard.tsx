@@ -5,8 +5,7 @@ import { OtpTimer } from "@/features/OtpTimer";
 
 interface CodeCardProps {
     accountId: number;
-    issuer?: string;
-    accountName: string;
+    displayName: string;
     code: string;
     remainingSeconds: number;
     interval: number;
@@ -16,8 +15,7 @@ interface CodeCardProps {
 
 export const CodeCard = ({
     accountId,
-    issuer,
-    accountName,
+    displayName,
     code,
     remainingSeconds,
     interval,
@@ -35,12 +33,7 @@ export const CodeCard = ({
                 onClick={onCopy}
             >
                 <Flex direction="column">
-                    <div>
-                        {issuer
-                            ? `${issuer}: ${accountName}`
-                            : accountName
-                        }
-                    </div>
+                    <div>{displayName}</div>
                     <div className={styles.codeCard__code}>{code}</div>
                 </Flex>
                 <Flex align="center">

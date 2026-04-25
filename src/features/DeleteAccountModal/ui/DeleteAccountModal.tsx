@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDeleteAccount, type Account } from "@/entities/account";
+import { useDeleteAccount, type AccountUI } from "@/entities/account";
 import { Button, Flex, Modal, StatusAlert } from "@/shared/ui";
 
 interface DeleteAccountModalProps {
     open?: boolean;
-    account?: Account | null;
+    account?: AccountUI | null;
     onClose: () => void;
 }
 
@@ -29,7 +29,7 @@ export const DeleteAccountModal = ({
     const handleDeleteConfirm = () => {
         if (!displayAccount) return;
         
-        deleteAccount(displayAccount.account_id, {
+        deleteAccount(displayAccount.accountId, {
             onSuccess: () => {
                 onClose();
             },
@@ -53,7 +53,7 @@ export const DeleteAccountModal = ({
             <Modal open={open} onClose={onClose}>
                 <Flex direction="column" gap="md">
                     <Flex justify="center">
-                        {t("home.deleteModal.confirm", { name: displayAccount?.account_name })}
+                        {t("home.deleteModal.confirm", { name: displayAccount?.displayName })}
                     </Flex>
                     <Flex gap="sm" justify="center">
                         <Button variant="ghost" onClick={onClose}>

@@ -70,7 +70,8 @@
                 "latest": "Последняя версия",
                 "available": "Доступна новая версия!",
                 "notAvailable": "У вас последняя версия",
-                "updateButton": "Обновить"
+                "updateButton": "Обновить",
+                "goToReleases": "Перейти к релизам"
             }
         },
         "links": {

@@ -12,8 +12,8 @@ pub fn run() {
     let builder = tauri::Builder::default()
         .plugin(
             tauri_plugin_log::Builder::new()
-                .level(tauri_plugin_log::log::LevelFilter::Info)
-                .build(),
+            .level(tauri_plugin_log::log::LevelFilter::Info)
+            .build(),
         )
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_clipboard_manager::init())
@@ -23,17 +23,20 @@ pub fn run() {
 
     #[cfg(desktop)]
     let builder = builder
-        .plugin(tauri_plugin_single_instance::init(|app, _, _| {
-            log::info!("Second instance detected, focusing main window");
-            if let Some(window) = app.get_webview_window("main") {
-                let _ = window.unminimize();
-                let _ = window.set_focus();
-            }
-        }))
-        .plugin(tauri_plugin_updater::Builder::new().build());
+    .plugin(tauri_plugin_single_instance::init(|app, _, _| {
+        log::info!("Second instance detected, focusing main window");
+        if let Some(window) = app.get_webview_window("main") {
+            let _ = window.unminimize();
+            let _ = window.set_focus();
+        }
+    }))
+    .plugin(tauri_plugin_updater::Builder::new().build());
 
     #[cfg(target_os = "android")]
-    android_keyring::set_android_keyring_credential_builder().unwrap();
+    let builder = {
+        android_keyring::set_android_keyring_credential_builder().unwrap();
+        builder.plugin(tauri_plugin_status_bar_color::init())
+    };
 
     let master_key = match get_or_create_master_key() {
         Ok(master_key) => master_key,

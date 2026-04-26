@@ -9,6 +9,7 @@
     cursor: pointer;
     transition: all var(--transition-normal);
     outline: none;
+    -webkit-tap-highlight-color: transparent;
 
     &:disabled {
         opacity: 0.6;

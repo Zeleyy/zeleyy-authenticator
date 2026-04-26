@@ -1,6 +1,6 @@
 [package]
 name = "zeleyy-authenticator"
-version = "0.5.1"
+version = "0.5.2"
 description = "TOTP authenticator app for managing 2FA codes"
 authors = ["Zeleyy"]
 edition = "2021"
@@ -47,6 +47,7 @@ keyring = { version = "3.6.3", features = ["sync-secret-service"] }
 [target.'cfg(target_os = "android")'.dependencies]
 keyring = { version = "3.6.3", default-features = false, features = [] }
 android-keyring = "0.2.0"
+tauri-plugin-status-bar-color = "1.0.0"
 rusqlite = { version = "0.39.0", features = ["bundled-sqlcipher-vendored-openssl"] }
 openssl = { version = "0.10", features = ["vendored"] }
 

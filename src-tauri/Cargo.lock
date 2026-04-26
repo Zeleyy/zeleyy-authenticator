@@ -4959,6 +4959,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "tauri-plugin-status-bar-color"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "14396c0f56b0afdbe53b1eaab0e48953c0b02d90f776aa8014e22b1bb47033c3"
+dependencies = [
+ "serde",
+ "tauri",
+ "tauri-plugin",
+ "thiserror 1.0.69",
+]
+
+[[package]]
 name = "tauri-plugin-store"
 version = "2.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6830,7 +6842,7 @@ dependencies = [
 
 [[package]]
 name = "zeleyy-authenticator"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = [
  "android-keyring",
  "base32",
@@ -6851,6 +6863,7 @@ dependencies = [
  "tauri-plugin-os",
  "tauri-plugin-process",
  "tauri-plugin-single-instance",
+ "tauri-plugin-status-bar-color",
  "tauri-plugin-store",
  "tauri-plugin-updater",
  "totp-lite",

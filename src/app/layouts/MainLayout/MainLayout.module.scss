@@ -24,15 +24,15 @@
 }
 
 .fab {
-    position: fixed;
-    right: calc(var(--spacing-sm) + var(--safe-right));
-    bottom: calc(var(--spacing-sm) + var(--safe-bottom));
+    position: absolute;
+    right: var(--spacing-sm);
+    bottom: var(--spacing-sm);
     z-index: 1000;
 }
 
 .sideDrawer {
     &__overlay {
-        position: fixed;
+        position: absolute;
         inset: 0;
         z-index: 10000;
         background-color: rgba(0, 0, 0, 0);
@@ -55,14 +55,14 @@
     }
 
     &__container {
-        position: fixed;
-        top: var(--safe-top);
+        position: absolute;
+        top: 0;
         left: 0;
-        bottom: var(--safe-bottom);
+        bottom: 0;
         z-index: 10001;
         transform: translateX(-100%);
         transition: transform 0.3s ease-in-out;
-        pointer-events: auto; 
+        pointer-events: auto;
     }
 
     &__content {
@@ -71,7 +71,6 @@
         max-width: 90vw;
         border-radius: 0 var(--border-radius-xl) var(--border-radius-xl) 0;
         overflow-y: auto;
-        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
         padding: var(--spacing-md);
     }
 
@@ -83,6 +82,11 @@
     &__navItem {
         &:hover {
             background-color: var(--bg-tertiary);
+        }
+        
+        &:active {
+            background-color: var(--bg-tertiary);
+            transition: none;
         }
     }
 }

@@ -4,6 +4,7 @@
     cursor: pointer;
     position: relative;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
 
     &__input {
         position: absolute;
@@ -54,7 +55,6 @@
             background-color: var(--neutral-50);
             border-radius: 50%;
             transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
     }
 }

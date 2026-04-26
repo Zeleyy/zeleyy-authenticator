@@ -62,7 +62,8 @@
         z-index: 10001;
         transform: translateX(-100%);
         transition: transform 0.3s ease-in-out;
-        pointer-events: auto; 
+        pointer-events: auto;
+        will-change: transform;
     }
 
     &__content {
@@ -83,6 +84,11 @@
     &__navItem {
         &:hover {
             background-color: var(--bg-tertiary);
+        }
+        
+        &:active {
+            background-color: var(--bg-tertiary);
+            transition: none;
         }
     }
 }

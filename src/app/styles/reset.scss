@@ -73,6 +73,7 @@ ul, ol {
 a {
     color: var(--primary);
     text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 button, input, textarea, select {

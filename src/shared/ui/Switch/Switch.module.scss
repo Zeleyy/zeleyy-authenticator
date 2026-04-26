@@ -4,6 +4,7 @@
     cursor: pointer;
     position: relative;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
 
     &__input {
         position: absolute;

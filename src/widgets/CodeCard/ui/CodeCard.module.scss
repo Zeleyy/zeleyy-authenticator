@@ -4,6 +4,11 @@
     border-bottom: 1px solid var(--border-medium);
     cursor: pointer;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &:active {
+        background-color: var(--bg-secondary);
+    }
 
     &__code {
         color: var(--primary);

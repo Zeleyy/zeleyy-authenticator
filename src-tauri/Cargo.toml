@@ -1,6 +1,6 @@
 [package]
 name = "zeleyy-authenticator"
-version = "0.5.1"
+version = "0.5.2"
 description = "TOTP authenticator app for managing 2FA codes"
 authors = ["Zeleyy"]
 edition = "2021"

@@ -56,7 +56,7 @@
 
     &__container {
         position: fixed;
-        top: var(--safe-top);
+        top: calc(var(--safe-top) - 0.2px);
         left: 0;
         bottom: var(--safe-bottom);
         z-index: 10001;

@@ -1,7 +1,7 @@
-import { type ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useMemo } from "react";
 import { ThemeContext } from "@/shared/lib/context";
-import { storage } from "@/shared/lib/storage";
 import { setStatusBarColor } from "tauri-plugin-status-bar-color-api";
+import { useThemeQuery } from "../hooks";
 
 interface ThemeProviderProps {
     children: ReactNode;
@@ -12,7 +12,7 @@ export const ThemeProvider = ({
     children,
     initialTheme = "dark",
 }: ThemeProviderProps) => {
-    const [theme, setThemeState] = useState(initialTheme);
+    const { theme, setQueryTheme } = useThemeQuery(initialTheme);
 
     useEffect(() => {
         const root = document.documentElement;
@@ -23,23 +23,17 @@ export const ThemeProvider = ({
             root.removeAttribute("data-theme");
             setStatusBarColor("#000000").catch(() => {});
         }
-        storage.set("theme", theme);
     }, [theme]);
 
-    const setTheme = useCallback((newTheme: string) => {
-        setThemeState(newTheme);
-    }, []);
-
     const toggleTheme = useCallback(() => {
-        setThemeState(prev => prev === 'dark' ? 'light' : 'dark');
-    }, []);
+        setQueryTheme(theme === "dark" ? "light" : "dark");
+    }, [theme, setQueryTheme]);
 
     const contextValue = useMemo(() => ({
         theme,
-        isDark: theme === 'dark',
-        setTheme,
+        isDark: theme === "dark",
         toggleTheme,
-    }), [theme, setTheme, toggleTheme]);
+    }), [theme, toggleTheme]);
 
     return (
         <ThemeContext.Provider value={contextValue}>

@@ -35,6 +35,10 @@
             "language": {
                 "label": "Language",
                 "description": "Choose interface language"
+            },
+            "animation": {
+                "label": "Page animations",
+                "description": "Smooth page transitions"
             }
         },
         "security": {

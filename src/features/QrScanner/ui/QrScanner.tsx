@@ -54,7 +54,7 @@ const { getInstance, cleanUp, isLoading, setIsLoading } = useQrScanner();
             } catch (error) {
                 onError?.(error as Error);
             } finally {
-                setTimeout(() => setIsLoading(false), 400);
+                setTimeout(() => setIsLoading(false), 350);
             }
         };
 

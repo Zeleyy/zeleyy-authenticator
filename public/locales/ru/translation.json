@@ -35,6 +35,10 @@
             "language": {
                 "label": "Язык",
                 "description": "Выберите язык интерфейса"
+            },
+            "animation": {
+                "label": "Анимация страниц",
+                "description": "Плавные переходы между страницами"
             }
         },
         "security": {

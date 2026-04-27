@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useTheme } from "@/shared/lib/hooks";
+import { usePageAnimation, useTheme } from "@/shared/lib/hooks";
 import { Button, Flex, Icon, Switch, Select } from "@/shared/ui";
 import { PageSection } from "@/widgets/PageSection";
 import { PreferenceItem } from "@/widgets/PreferenceItem";
@@ -9,6 +9,7 @@ export const SettingsPage = () => {
     const { t, i18n } = useTranslation();
     const { isDark, toggleTheme } = useTheme();
     const [isChecked, setIsChecked] = useState(false);
+    const { enabled, toggle } = usePageAnimation();
 
     return (
         <>
@@ -37,6 +38,18 @@ export const SettingsPage = () => {
                                 { value: 'en', label: 'English' },
                             ]}
                         />
+                    }
+                />
+                <PreferenceItem
+                    label={t("settings.appearance.animation.label")}
+                    description={t("settings.appearance.animation.description")}
+                    control={
+                        <Flex align="center">
+                            <Switch
+                                checked={enabled}
+                                onChange={toggle}
+                            />
+                        </Flex>
                     }
                 />
             </PageSection>

@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { usePageAnimation, useTheme } from "@/shared/lib/hooks";
+import { useBiometry, usePageAnimation, useTheme } from "@/shared/lib/hooks";
 import { Button, Flex, Icon, Switch, Select } from "@/shared/ui";
 import { PageSection } from "@/widgets/PageSection";
 import { PreferenceItem } from "@/widgets/PreferenceItem";
@@ -8,8 +7,8 @@ import { PreferenceItem } from "@/widgets/PreferenceItem";
 export const SettingsPage = () => {
     const { t, i18n } = useTranslation();
     const { isDark, toggleTheme } = useTheme();
-    const [isChecked, setIsChecked] = useState(false);
     const { enabled, toggle } = usePageAnimation();
+    const { enabled: biometryEnabled, toggle: biometryToggle } = useBiometry();
 
     return (
         <>
@@ -61,8 +60,8 @@ export const SettingsPage = () => {
                     control={
                         <Flex align="center">
                             <Switch
-                                checked={isChecked}
-                                onChange={(e) => setIsChecked(e.target.checked)}
+                                checked={biometryEnabled}
+                                onChange={biometryToggle}
                             />
                         </Flex>
                     }

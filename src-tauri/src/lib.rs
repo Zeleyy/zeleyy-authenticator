@@ -19,7 +19,8 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_store::Builder::new().build())
-        .plugin(tauri_plugin_opener::init());
+        .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_biometry::init());
 
     #[cfg(desktop)]
     let builder = builder
@@ -67,6 +68,8 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            commands::check_biometry_status,
+            commands::set_biometry_status,
             commands::get_accounts,
             commands::add_account,
             commands::update_account,

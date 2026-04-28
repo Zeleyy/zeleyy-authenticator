@@ -12,6 +12,19 @@
     "error": {
         "unknown": "Unknown error"
     },
+    "auth": {
+        "title": "Authentication",
+        "cancel": "Cancel",
+        "reason": {
+            "default": "Please verify your identity to continue",
+            "enableBiometry": "Confirm your identity to enable biometric login",
+            "disableBiometry": "Confirm your identity to disable biometric login"
+        },
+        "lockScreen": {
+            "title": "Access Restricted",
+            "retry": "Try Again"
+        }
+    },
     "home": {
         "search": {
             "placeholder": "Search"

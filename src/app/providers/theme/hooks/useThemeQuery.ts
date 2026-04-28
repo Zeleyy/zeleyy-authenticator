@@ -1,13 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/shared/api";
 import { storage } from "@/shared/lib/storage";
-
+import { queryKeys } from "@/shared/config";
 
 export const useThemeQuery = (initialTheme?: string) => {
-    const queryKey = ["settings", "theme"];
-
     const query = useQuery({
-        queryKey,
+        queryKey: queryKeys.settings.theme,
         queryFn: async () => (await storage.get<string>("theme")) ?? "dark",
         initialData: initialTheme,
         staleTime: Infinity,
@@ -20,7 +18,7 @@ export const useThemeQuery = (initialTheme?: string) => {
             return newTheme;
         },
         onMutate: (newTheme) => {
-            queryClient.setQueryData(queryKey, newTheme);
+            queryClient.setQueryData(queryKeys.settings.theme, newTheme);
         }
     });
 

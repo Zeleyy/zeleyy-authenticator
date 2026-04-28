@@ -1,0 +1,8 @@
+.authGuard {
+    height: 100%;
+    text-align: center;
+
+    &__error {
+        color: var(--error);
+    }
+}

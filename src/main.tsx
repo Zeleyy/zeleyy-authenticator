@@ -7,6 +7,7 @@ import { QueryProvider, ThemeProvider } from "./app/providers";
 import "./shared/config/i18n";
 import { biometryService } from "./shared/lib/authService";
 import { invoke } from "@tauri-apps/api/core";
+import { AuthGuard } from "./features/auth";
 
 const rootElement = document.getElementById("root")!;
 const root = createRoot(rootElement);
@@ -16,10 +17,12 @@ const init = async () => {
         const [initialTheme, initialLanguage, biometryStatus] = await Promise.all([
             storage.get<string>("theme").then(res => res || "dark"),
             storage.get<string>("language").then(res => res || "ru"),
-            invoke("check_biometry_status"),
+            invoke<boolean>("check_biometry_status").catch(() => false),
         ]);
 
         await i18n.changeLanguage(initialLanguage);
+
+        root.render(<AuthGuard isLoading />);
 
         const startApp = () => {
             root.render(
@@ -31,15 +34,12 @@ const init = async () => {
             );
         };
 
-        const showLockScreen = (errorMsg?: string) => {
+        const showAuthGuard = (errorMsg?: string) => {
             root.render(
-                <div className="lock-screen">
-                    <h1>{i18n.t("auth.lockScreen.title")}</h1>
-                    {errorMsg && <p className="error">{errorMsg}</p>}
-                    <button onClick={() => runAuth()}>
-                        {i18n.t("auth.lockScreen.retry")}
-                    </button>
-                </div>
+                <AuthGuard
+                    error={errorMsg}
+                    onRetry={runAuth}
+                />
             );
         };
 
@@ -51,7 +51,7 @@ const init = async () => {
             if (result.status === "success" || result.status === "not_available") {
                 startApp();
             } else {
-                showLockScreen(result.message);
+                showAuthGuard(result.message);
             }
         };
 

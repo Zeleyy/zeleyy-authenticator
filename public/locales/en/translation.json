@@ -22,6 +22,7 @@
         },
         "lockScreen": {
             "title": "Access Restricted",
+            "loading": "Confirm your identity",
             "retry": "Try Again"
         }
     },

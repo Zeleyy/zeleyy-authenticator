@@ -12,6 +12,19 @@
     "error": {
         "unknown": "Unknown error"
     },
+    "auth": {
+        "title": "Authentication",
+        "cancel": "Cancel",
+        "reason": {
+            "default": "Please verify your identity to continue",
+            "enableBiometry": "Confirm your identity to enable biometric login",
+            "disableBiometry": "Confirm your identity to disable biometric login"
+        },
+        "lockScreen": {
+            "loading": "Authentication required",
+            "verify": "Verify"
+        }
+    },
     "home": {
         "search": {
             "placeholder": "Search"
@@ -35,6 +48,10 @@
             "language": {
                 "label": "Language",
                 "description": "Choose interface language"
+            },
+            "animation": {
+                "label": "Page animations",
+                "description": "Smooth page transitions"
             }
         },
         "security": {

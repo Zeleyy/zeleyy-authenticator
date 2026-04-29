@@ -23,19 +23,22 @@ pub fn run() {
 
     #[cfg(desktop)]
     let builder = builder
-    .plugin(tauri_plugin_single_instance::init(|app, _, _| {
-        log::info!("Second instance detected, focusing main window");
-        if let Some(window) = app.get_webview_window("main") {
-            let _ = window.unminimize();
-            let _ = window.set_focus();
-        }
-    }))
-    .plugin(tauri_plugin_updater::Builder::new().build());
+        .plugin(tauri_plugin_single_instance::init(|app, _, _| {
+            log::info!("Second instance detected, focusing main window");
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.unminimize();
+                let _ = window.set_focus();
+            }
+        }))
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_biometry::init());
 
     #[cfg(target_os = "android")]
     let builder = {
         android_keyring::set_android_keyring_credential_builder().unwrap();
-        builder.plugin(tauri_plugin_status_bar_color::init())
+        builder
+            .plugin(tauri_plugin_status_bar_color::init())
+            .plugin(tauri_plugin_biometric::init())
     };
 
     let master_key = match get_or_create_master_key() {
@@ -67,6 +70,8 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            commands::check_biometry_status,
+            commands::set_biometry_status,
             commands::get_accounts,
             commands::add_account,
             commands::update_account,

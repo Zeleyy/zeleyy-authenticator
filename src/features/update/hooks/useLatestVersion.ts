@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { check } from "@tauri-apps/plugin-updater";
+import { queryKeys } from "@/shared/config";
 
 export const useLatestVersion = ({ enabled = true }: { enabled: boolean }) => {
     return useQuery({
-        queryKey: ["last", "version"],
+        queryKey: queryKeys.versions.last,
         queryFn: async (): Promise<string | null> => {
             const update = await check();
 

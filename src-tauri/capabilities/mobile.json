@@ -9,6 +9,7 @@
   ],
   "permissions": [
     "log:default",
-    "status-bar-color:default"
+    "status-bar-color:default",
+    "biometric:default"
   ]
 }

@@ -1,10 +1,36 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
+import { globSync } from "glob";
+import { readFileSync, writeFileSync } from "fs";
+import { ViteMinifyPlugin } from "vite-plugin-minify";
 
 const host = process.env.TAURI_DEV_HOST;
 
 export default defineConfig(async () => ({
-    plugins: [react()],
+    plugins: [
+        react(),
+        ViteMinifyPlugin({}),
+        {
+            name: 'minify-locales-json',
+            apply: 'build',
+            closeBundle() {
+                const localesDir = path.resolve(__dirname, 'dist/locales');
+                const files = globSync(`${localesDir}/**/*.json`);
+
+                files.forEach((filePath) => {
+                    try {
+                        const content = readFileSync(filePath, 'utf-8');
+                        const minified = JSON.stringify(JSON.parse(content));
+                        writeFileSync(filePath, minified);
+                    } catch (err) {
+                        console.error(`Error minifying ${filePath}:`, err);
+                    }
+                });
+            }
+        }
+    ],
+    
     build: {
         target: "esnext",
         cssMinify: true,

@@ -13,6 +13,7 @@
     "process:default",
     "clipboard-manager:default",
     "os:default",
-    "log:default"
+    "log:default",
+    "biometry:default"
   ]
 }

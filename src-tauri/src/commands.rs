@@ -5,7 +5,29 @@ use tauri::State;
 use tauri_plugin_log::log;
 use totp_lite::{totp_custom, Sha1};
 
-use crate::vault::database::DbPool;
+use crate::vault::{database::DbPool, keyring::SERVICE_NAME};
+
+#[tauri::command]
+pub async fn check_biometry_status() -> Result<bool, String> {
+    let entry = keyring::Entry::new(SERVICE_NAME, "biometry_enabled").map_err(|e| e.to_string())?;
+
+    match entry.get_password() {
+        Ok(val) => Ok(val == "true"),
+        Err(_) => Ok(false),
+    }
+}
+
+#[tauri::command]
+pub async fn set_biometry_status(enabled: bool) -> Result<(), String> {
+    let entry = keyring::Entry::new(SERVICE_NAME, "biometry_enabled").map_err(|e| e.to_string())?;
+
+    if enabled {
+        entry.set_password("true").map_err(|e| e.to_string())?;
+    } else {
+        entry.delete_credential().map_err(|e| e.to_string())?;
+    }
+    Ok(())
+}
 
 #[derive(Serialize)]
 pub struct Account {

@@ -1,6 +1,6 @@
 [package]
 name = "zeleyy-authenticator"
-version = "0.5.2"
+version = "0.6.0"
 description = "TOTP authenticator app for managing 2FA codes"
 authors = ["Zeleyy"]
 edition = "2021"
@@ -53,5 +53,10 @@ openssl = { version = "0.10", features = ["vendored"] }
 
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-biometry = "0.2.6"
 tauri-plugin-single-instance = "2"
 tauri-plugin-updater = "2"
+
+
+[target.'cfg(any(target_os = "android", target_os = "ios"))'.dependencies]
+tauri-plugin-biometric = "2"

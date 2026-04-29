@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLocation, useOutlet, useMatches } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { DEFAULT_ORDER, ROUTES_ORDER } from "@/shared/config";
+import { usePageAnimation } from "@/shared/lib/hooks";
 
 const variants = {
     initial: (direction: string) => ({
@@ -20,6 +21,7 @@ const variants = {
 };
 
 export const AnimatedLayout = () => {
+    const { enabled } = usePageAnimation();
     const location = useLocation();
     const outlet = useOutlet();
     const matches = useMatches();
@@ -50,7 +52,7 @@ export const AnimatedLayout = () => {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                transition={{ duration: 0.1, ease: "easeInOut" }}
+                transition={{ duration: enabled ? 0.1 : 0, ease: "easeInOut" }}
                 className={styles.animatedLayout}
             >
                 {outlet}

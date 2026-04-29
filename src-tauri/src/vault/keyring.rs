@@ -4,7 +4,7 @@ use tauri_plugin_log::log::info;
 
 use crate::vault::utils::generate_random_key;
 
-static SERVICE_NAME: &'static str = "ru.zeleyy.zeleyy-authenticator";
+pub static SERVICE_NAME: &'static str = "ru.zeleyy.zeleyy-authenticator";
 
 pub fn get_or_create_master_key() -> Result<[u8; 32], String> {
     info!("Initializing master key from secure storage");

@@ -126,7 +126,8 @@ jobs:
       - name: Sync Android Configuration
         run: |
           cp src-tauri/android-config/AndroidManifest.xml src-tauri/gen/android/app/src/main/AndroidManifest.xml
-          cp src-tauri/android-config/build.gradle.kts src-tauri/gen/android/app/build.gradle.kts
+          cp src-tauri/android-config/app/build.gradle.kts src-tauri/gen/android/app/build.gradle.kts
+          cp src-tauri/android-config/build.gradle.kts src-tauri/gen/android/build.gradle.kts
       
       - name: Copy Android icons
         run: |

@@ -1,1 +1,2 @@
-export { biometryService } from "./BiometryService";
+export { biometryService } from "./biometryService";
+export { getBiometryAdapter } from "./biometryAdapter";

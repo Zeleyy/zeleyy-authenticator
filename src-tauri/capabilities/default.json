@@ -13,7 +13,6 @@
     "clipboard-manager:default",
     "clipboard-manager:allow-write-text",
     "os:default",
-    "log:default",
-    "biometry:default"
+    "log:default"
   ]
 }

@@ -1,5 +1,6 @@
-import { authenticate, checkStatus, type AuthOptions } from "@choochmeque/tauri-plugin-biometry-api";
 import i18n from "@/shared/config/i18n";
+import { info } from "@tauri-apps/plugin-log"
+import { getBiometryAdapter } from "./biometryAdapter";
 
 export type BiometryResult = 
     | { status: "success" }
@@ -7,16 +8,25 @@ export type BiometryResult =
     | { status: "error"; message: string };
 
 export const biometryService = {
-    async verify(reason: string = "auth.reason.default", options?: AuthOptions): Promise<BiometryResult> {
+    async verify(reason: string = "auth.reason.default"): Promise<BiometryResult> {
         try {
-            const { isAvailable } = await checkStatus();
+            info("[Biometry] Starting verification...");
+
+            const biometry = await getBiometryAdapter();
+
+            info("[Biometry] Checking status...");
+            const { isAvailable } = await biometry.checkStatus();
+            info(`[Biometry] Status check completed. Available: ${isAvailable}`);
             if (!isAvailable) return { status: "not_available" };
 
-            await authenticate(i18n.t(reason), {
+            info("[Biometry] Requesting user authentication...");
+            await biometry.authenticate(i18n.t(reason), {
                 title: i18n.t("auth.title"),
                 cancelTitle: i18n.t("auth.cancel"),
-                ...options
+                allowDeviceCredential: true,
             });
+
+            info("[Biometry] Authentication successful!");
 
             return { status: "success" };
         } catch (error) {

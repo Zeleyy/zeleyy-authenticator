@@ -21,9 +21,8 @@
             "disableBiometry": "Confirm your identity to disable biometric login"
         },
         "lockScreen": {
-            "title": "Access Restricted",
-            "loading": "Confirm your identity",
-            "retry": "Try Again"
+            "loading": "Authentication required",
+            "verify": "Verify"
         }
     },
     "home": {

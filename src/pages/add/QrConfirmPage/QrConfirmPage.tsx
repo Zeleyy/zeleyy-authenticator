@@ -13,13 +13,14 @@ export const QrConfirmPage = () => {
     const initialData = useMemo(() => parseQrData(state?.qrData || ""), [state?.qrData]);
     const [accountName, setAccountName] = useState(initialData.accountName);
     const [error, setError] = useState("");
-    const { mutate: addAccount, isPending } = useAddAccount();
+    const { mutate: addAccount, isPending, isSuccess } = useAddAccount();
     
     useEffect(() => {
+        if (isSuccess) return;
         if (!state?.qrData || !initialData.secret) {
             navigate(ROUTES.ADD.QR.ROOT, { replace: true });
         }
-    }, [state?.qrData, initialData.secret, navigate]);
+    }, [state?.qrData, initialData.secret, navigate, isSuccess]);
 
     const handleSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
@@ -30,7 +31,7 @@ export const QrConfirmPage = () => {
         addAccount(
             { ...initialData, accountName: trimmedName },
             {
-                onSuccess: () => navigate(ROUTES.HOME),
+                onSuccess: () => navigate(ROUTES.HOME, { replace: true }),
                 onError: (err: Error) => setError(err.message || t("errors.unknown"))
             }
         );

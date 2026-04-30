@@ -870,20 +870,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "data-encoding"
-version = "2.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d7a1e2f27636f116493b8b860f5546edb47c8d8f8ea73e1d2a20be88e28d1fea"
-
-[[package]]
 name = "dbus"
-version = "0.9.10"
+version = "0.9.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "21b3aa68d7e7abee336255bd7248ea965cc393f3e70411135a6f6a4b651345d4"
+checksum = "b942602992bb7acfd1f51c49811c58a610ef9181b6e66f3e519d79b540a3bf73"
 dependencies = [
  "libc",
  "libdbus-sys",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2971,9 +2965,9 @@ dependencies = [
 
 [[package]]
 name = "openssl"
-version = "0.10.77"
+version = "0.10.78"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bfe4646e360ec77dff7dde40ed3d6c5fee52d156ef4a62f53973d38294dad87f"
+checksum = "f38c4372413cdaaf3cc79dd92d29d7d9f5ab09b51b10dded508fb90bb70b9222"
 dependencies = [
  "bitflags 2.11.0",
  "cfg-if",
@@ -3012,9 +3006,9 @@ dependencies = [
 
 [[package]]
 name = "openssl-sys"
-version = "0.9.113"
+version = "0.9.114"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ad2f2c0eba47118757e4c6d2bff2838f3e0523380021356e7875e858372ce644"
+checksum = "13ce1245cd07fcc4cfdb438f7507b0c7e4f3849a69fd84d52374c66d83741bb6"
 dependencies = [
  "cc",
  "libc",
@@ -6909,13 +6903,8 @@ name = "zeleyy-authenticator"
 version = "0.6.0"
 dependencies = [
  "android-keyring",
- "base32",
- "data-encoding",
  "keyring",
  "openssl",
- "r2d2",
- "r2d2_sqlite",
- "rand 0.10.1",
  "rusqlite",
  "serde",
  "serde_json",
@@ -6932,6 +6921,24 @@ dependencies = [
  "tauri-plugin-status-bar-color",
  "tauri-plugin-store",
  "tauri-plugin-updater",
+ "zeleyy-authenticator-core",
+]
+
+[[package]]
+name = "zeleyy-authenticator-core"
+version = "0.1.0"
+dependencies = [
+ "base32",
+ "base64 0.22.1",
+ "keyring",
+ "log",
+ "openssl",
+ "r2d2",
+ "r2d2_sqlite",
+ "rand 0.10.1",
+ "rusqlite",
+ "serde",
+ "serde_json",
  "totp-lite",
 ]
 

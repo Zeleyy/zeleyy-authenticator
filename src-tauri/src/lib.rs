@@ -1,9 +1,8 @@
 use tauri::Manager;
 use tauri_plugin_log::log;
+use zeleyy_authenticator_core as core_logic;
 
 mod commands;
-mod vault;
-use crate::vault::{database::Database, keyring::get_or_create_master_key};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -41,7 +40,7 @@ pub fn run() {
             .plugin(tauri_plugin_biometric::init())
     };
 
-    let master_key = match get_or_create_master_key() {
+    let master_key = match core_logic::get_or_create_master_key() {
         Ok(master_key) => master_key,
         Err(e) => {
             log::error!("Failed to initialize master key: {}", e);
@@ -57,7 +56,7 @@ pub fn run() {
             std::fs::create_dir_all(&app_path)?;
             log::info!("App data directory ready");
 
-            let pool = match Database::init(&app_path, &master_key) {
+            let pool = match core_logic::initialize_db(&app_path, &master_key) {
                 Ok(pool) => pool,
                 Err(e) => {
                     log::error!("Database init failed: {}", e);

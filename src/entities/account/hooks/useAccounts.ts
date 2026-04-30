@@ -13,7 +13,7 @@ export const useAccounts = (searchQuery?: string) => {
                 displayName: acc.issuer ? `${acc.issuer}: ${acc.accountName}` : acc.accountName,
             }));
         },
-        refetchInterval: 1000,
+        refetchInterval: 1000, // @TODO интервала быть не должно обновления будут происходить по invalidate
         select: (accounts) => {
             if (!searchQuery) return accounts;
             const query = searchQuery.toLowerCase();

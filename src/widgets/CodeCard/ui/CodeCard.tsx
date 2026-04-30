@@ -12,7 +12,7 @@ interface CodeCardProps {
     onContextMenu: (e: MouseEvent) => void;
     onCopy: () => void;
 }
-
+// @TODO изменить логику получения данных инвалидировать по истечению interval добавить в ответ от rust expire_at
 export const CodeCard = ({
     accountId,
     displayName,

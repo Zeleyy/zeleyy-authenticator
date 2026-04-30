@@ -53,7 +53,7 @@ export const AccountList = ({ accounts }: AccountListProps) => {
                     accountId={account.accountId}
                     displayName={account.displayName}
                     code={account.code}
-                    remainingSeconds={account.remainingSeconds}
+                    expiresAt={account.expiresAt}
                     interval={account.interval}
                     onContextMenu={(e) => openMenu(e, account)}
                     onCopy={() => copy(account.code)}

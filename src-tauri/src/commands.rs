@@ -46,7 +46,7 @@ pub struct AccountWithCode {
     pub issuer: Option<String>,
     pub account_name: String,
     pub code: String,
-    pub remaining_seconds: u64,
+    pub expires_at: u64,
 }
 
 #[tauri::command]
@@ -96,7 +96,7 @@ pub async fn get_accounts(pool: State<'_, DbPool>) -> Result<Vec<AccountWithCode
             issuer: acc.issuer,
             account_name: acc.account_name,
             code: code_result,
-            remaining_seconds: interval - (now % interval),
+            expires_at: now + (interval - (now % interval)),
         });
     }
 

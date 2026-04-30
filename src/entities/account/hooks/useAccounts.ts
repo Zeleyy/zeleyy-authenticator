@@ -13,7 +13,13 @@ export const useAccounts = (searchQuery?: string) => {
                 displayName: acc.issuer ? `${acc.issuer}: ${acc.accountName}` : acc.accountName,
             }));
         },
-        refetchInterval: 1000, // @TODO интервала быть не должно обновления будут происходить по invalidate
+        staleTime: (query) => {
+            const accounts = query.state.data;
+            if (!accounts || accounts.length === 0) return 0;
+            const minRemaining = Math.min(...accounts.map(a => a.expiresAt - Math.floor(Date.now() / 1000)));
+            return Math.max(0, minRemaining * 1000);
+        },
+        refetchOnWindowFocus: false,
         select: (accounts) => {
             if (!searchQuery) return accounts;
             const query = searchQuery.toLowerCase();

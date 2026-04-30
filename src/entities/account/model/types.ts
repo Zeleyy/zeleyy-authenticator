@@ -5,7 +5,7 @@ export interface Account {
     digits: number;
     interval: number;
     code: string;
-    remainingSeconds: number;
+    expiresAt: number;
 }
 
 export interface AccountUI extends Account {

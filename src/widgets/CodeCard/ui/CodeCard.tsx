@@ -1,27 +1,48 @@
 import styles from "./CodeCard.module.scss";
-import { type MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { Flex } from "@/shared/ui";
+import { queryClient } from "@/shared/api";
+import { queryKeys } from "@/shared/config";
 import { OtpTimer } from "@/features/OtpTimer";
 
 interface CodeCardProps {
     accountId: number;
     displayName: string;
     code: string;
-    remainingSeconds: number;
+    expiresAt: number;
     interval: number;
     onContextMenu: (e: MouseEvent) => void;
     onCopy: () => void;
 }
-// @TODO изменить логику получения данных инвалидировать по истечению interval добавить в ответ от rust expire_at
+
 export const CodeCard = ({
     accountId,
     displayName,
     code,
-    remainingSeconds,
+    expiresAt,
     interval,
     onContextMenu,
     onCopy,
 }: CodeCardProps) => {
+    const getRemaining = () => Math.max(0, expiresAt - Math.floor(Date.now() / 1000));
+
+    const [seconds, setSeconds] = useState(getRemaining());
+
+    useEffect(() => {
+        setSeconds(getRemaining());
+
+        const timer = setInterval(() => {
+            const timeLeft = getRemaining();
+            setSeconds(timeLeft);
+
+            if (timeLeft <= 0) {
+                queryClient.invalidateQueries({ queryKey: queryKeys.accounts.all });
+            }
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [expiresAt]);
+
     return (
         <>
             <Flex
@@ -37,7 +58,7 @@ export const CodeCard = ({
                     <div className={styles.codeCard__code}>{code}</div>
                 </Flex>
                 <Flex align="center">
-                    <OtpTimer seconds={remainingSeconds} maxSeconds={interval}/> 
+                    <OtpTimer seconds={seconds} maxSeconds={interval}/> 
                 </Flex>
             </Flex>
         </>

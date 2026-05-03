@@ -1,5 +1,5 @@
 import styles from "./CodeCard.module.scss";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useState, type MouseEvent } from "react";
 import { Flex } from "@/shared/ui";
 import { queryClient } from "@/shared/api";
 import { queryKeys } from "@/shared/config";
@@ -24,24 +24,29 @@ export const CodeCard = ({
     onContextMenu,
     onCopy,
 }: CodeCardProps) => {
-    const getRemaining = () => Math.max(0, expiresAt - Math.floor(Date.now() / 1000));
+    const calculateRemaining = useCallback(() => {
+        return Math.max(0, expiresAt - Math.floor(Date.now() / 1000));
+    }, [expiresAt]);
 
-    const [seconds, setSeconds] = useState(getRemaining());
+    const [seconds, setSeconds] = useState(calculateRemaining);
 
     useEffect(() => {
-        setSeconds(getRemaining());
+        setSeconds(calculateRemaining());
+    }, [calculateRemaining]);
 
+    useEffect(() => {
         const timer = setInterval(() => {
-            const timeLeft = getRemaining();
+            const timeLeft = calculateRemaining();
             setSeconds(timeLeft);
 
             if (timeLeft <= 0) {
                 queryClient.invalidateQueries({ queryKey: queryKeys.accounts.all });
+                clearInterval(timer);
             }
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [expiresAt]);
+    }, [calculateRemaining]);
 
     return (
         <>

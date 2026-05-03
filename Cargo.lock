@@ -6597,7 +6597,7 @@ dependencies = [
 
 [[package]]
 name = "zeleyy-authenticator"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "android-keyring",
  "keyring",

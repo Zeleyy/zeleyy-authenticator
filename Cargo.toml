@@ -4,7 +4,7 @@ resolver = "2"
 
 [workspace.dependencies]
 serde = { version = "1.0.228", features = ["derive"] }
-keyring = { version = "3.6.3" }
+keyring = { version = "3.6.3", default-features = false, features = [] }
 rusqlite = { version = "0.39.0" }
 
 [profile.release]
